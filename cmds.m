@@ -14,7 +14,7 @@
 
 
 %% clear mainspace (keep paths for pde2path) and close all plot windows
-%extra comment4
+%extra comment6
 clc;
 close all;
 keep pphome;
