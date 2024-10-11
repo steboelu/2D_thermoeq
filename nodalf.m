@@ -1,4 +1,4 @@
-function f = nodalf(p,u)%alfie
+function f = nodalf(p,u)
 % NODALf help function, which calculates the 'reaction' part of the ode
 % (see output)
 %
