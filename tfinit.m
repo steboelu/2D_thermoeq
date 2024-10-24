@@ -27,7 +27,7 @@ p.fuha.sGjac = @sGjac; % set derivative of bifurcation function
 p.sw.jac=1;%%%%%%%%%%%%%%%%%%%%1 for analytic jacobian (0 numerical)
 %p.fuha.outfu=@Jbra;%%%%%%%%%%%%%%%%%%%%generates additional branch data
 
-sw.sym=0;%%%%%%%%%%%%%%%%%%%% HERE WE NEED TO IMPOSE SYMMETRY swift-hohenberg gets hexagons with this setting
+sw.sym=2;%%%%%%%%%%%%%%%%%%%%
 pde = stanpdeo2D(lx(1),lx(2),nx,nx,sw); % create 2D pde-object on domain (-lx(1),lx(1))x(-lx(2),lx(2)) with (1D) mesh size h = 2*lx/nx
 
 %%%%%%%%%%%%%%%%%%%% copied but 2-4 not needed
