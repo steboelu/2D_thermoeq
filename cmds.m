@@ -75,6 +75,14 @@ if saveFigures
 end
 
 %% c7 : plot solutions
+
+plotsol('2D2','pt129',1,1,3)
+saveas(gcf,'sol-1per-filmrup','epsc')
+
+plotsol('2D9','pt200',1,1,3)
+saveas(gcf,'sol-2per-filmrup','epsc')
+
+
 % % plot bifurcating solution close to the bifurcation point
 % p2 = loadp('1D2','pt5');
 % % figure(4) %%%%%%%%%%%%%%%%%%%% commented out
