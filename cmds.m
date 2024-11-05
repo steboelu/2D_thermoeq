@@ -25,7 +25,8 @@ saveData = 0;
 
 %% c1: init and set parameters
 p = [];
-lx = [2*pi (2/sqrt(3))*pi];   % set domain size
+% lx = [2*pi (2/sqrt(3))*pi];   % set domain size
+lx = [2*pi 2*pi];
 nx = [30 30];     % number of discretisation points per dimension in domain
 Minit = 3.9;          % initial Marangoni number
 ginit = 1;          % set gravitiy constant
@@ -37,34 +38,41 @@ para = 1;           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;%%%%%%%%%%%%%%%%%%%% copied
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,200);%%%%%%%%%%%%%%%%%%%% 90 not enough
+p = cont(p,300);%%%%%%%%%%%%%%%%%%%% 90 not enough
 
 %% c3: switch branch to periodic bifurcation branches and continue 
 % p = swibra('init','bpt2','1D2'); p = cont(p,20); % branch at M^*(k_0)
 % p = swibra('init','bpt4','1D4'); p = cont(p,20); % branch at M^*(2k_0)
 % p = swibra('init','bpt6','1D6'); p = cont(p,20); % branch at M^*(3k_0)
-aux=[]; aux.soltol=1e-8; aux.m=8; %%%%%%%%%%%%%%%%%%%% provide dimension of kernel, 4 also works
-p0=cswibra('init','bpt7',aux); 
-p0.nc.lammax=0.3; 
-% p=seltau(p0,1,'2D2',2); 
-p=gentau(p0,1,'2D2'); 
-p.sol.ds=0.1; 
-p=cont(p,20); % hexagons // or pmcont
+% aux=[]; aux.soltol=1e-8; aux.m=8; %%%%%%%%%%%%%%%%%%%% provide dimension of kernel, 4 also works
+p0=cswibra('init','bpt3'); 
+% p0.nc.lammax=0.3; 
+p=seltau(p0, 3,'2D2',3); 
+% p=gentau(p0,1,'2D2'); 
+p.sol.ds=0.01; 
+p=pmcont(p,150); % hexagons // or pmcont
+
+p0=cswibra('init','bpt9'); 
+% p0.nc.lammax=0.3; 
+p=seltau(p0, 3,'2D9',3); 
+% p=gentau(p0,1,'2D2'); 
+p.sol.ds=0.01; 
+p=pmcont(p,200); % hexagons // or pmcont
 
 
 %% c6: plot bifurcation diagram
-% hold on;
-% plotbra('init','cl','k');
-% plotbra('1D2','cl','b','lab',[1,10,15,16,17,18,19,20]);
-% plotbra('1D4','cl','b','lab',[5,15]);%%%%%%%%%%%%%%%%%%%% was ms instead of lab
+hold on;
+plotbra('init','cl','k');
+plotbra('2D2','cl','b');
+plotbra('2D9','cl','b');%%%%%%%%%%%%%%%%%%%% was ms instead of lab
 % plotbra('1D6','cl','b','lab',[5,20]);%%%%%%%%%%%%%%%%%%%% was ms instead of lab
-% hold off;
+hold off;
 
-% % save bifurcation diagram as eps
-% if saveFigures
-%     set(gcf,'position',[0,0,500,400])
-%     saveas(gcf,'bifurcation-graph','epsc');
-% end
+% save bifurcation diagram as eps
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'bifurcation-graph','epsc');
+end
 
 %% c7 : plot solutions
 % % plot bifurcating solution close to the bifurcation point

@@ -32,9 +32,9 @@ pde = stanpdeo2D(lx(1),lx(2),nx,nx,sw); % create 2D pde-object on domain (-lx(1)
 
 %%%%%%%%%%%%%%%%%%%% copied but 2-4 not needed
 p.plot.pstyle=2; %%%%%%%%%%%%%%%%%%%% contour plot
-%p.dim=2; 
-%p.Om=4*lx(1)*lx(2); I call this p.vol
-%p.plot.axis='image';
+p.dim=2; 
+% p.Om=4*lx(1)*lx(2); % I call this p.vol
+% p.plot.axis='image';
 %%%%%%%%%%%%%%%%%%%%
 
 p.vol = 4*lx(1)*lx(2); %%%%%%%%%%%%%%%%%%%%% set domain volume
@@ -60,5 +60,5 @@ p.nc.nsteps = 100; % set default number of continuation steps
 p.nc.nq = 1; % number of constraints
 p.fuha.qf = @qf; % set mass function
 p.fuha.qfder = @qfder; % set derivative of mass function
-%p.sw.qjac=1; %%%%%%%%%%%%%%%%%%%%% my q is 0 so I do not need to tell it is analytic 
+p.sw.qjac=1; %%%%%%%%%%%%%%%%%%%%% my q is 0 so I do not need to tell it is analytic 
 end
