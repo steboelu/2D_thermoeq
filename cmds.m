@@ -35,37 +35,40 @@ par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
 p = setfn(p,'init');
 para = 1;           % set Marangoni number as bifurcation parameter
-p.nc.dsmax=0.03;%%%%%%%%%%%%%%%%%%%% copied
+p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,500);%%%%%%%%%%%%%%%%%%%% 90 not enough
+p = cont(p,900);    % 900 need to find bpt35
 
 %% c3: switch branch to periodic bifurcation branches and continue 
-p0=cswibra('init','bpt3'); 
-p=seltau(p0,1,'2D2',3); % % % hex: .,3,.,. does not work anymore, only have 2 directions
+% at bpt3 k_0=1/2, thus critical M^*(k_0)=5
+% 3 dim kernel: roll waves (1) and half hexagon and flipped half hexagon (2,3)
+% weird: going in first direction we remain on trivial branch
+p0=qswibra('init','bpt3'); 
+p=seltau(p0,2,'2D3',2); 
 p.sol.ds=0.01; 
-p=pmcont(p,150); % hexagons // or pmcont
+p=pmcont(p,150); 
+plotsol('2D3','pt150',1,1,3)
 
-%% This gives first HEXAGONS
-p0=qswibra('init','bpt7'); %(cswibra works as well)
-p=seltau(p0,1,'2D7',1); 
+%% c4: switch branch to periodic bifurcation branches and continue 
+% at bpt9 k_0=1, thus critical M^*(k_0)=8
+% we expect 2 dim kernel but here we only get hexagons and at close-by bpt10
+% we get roll waves
+p=swibra('init','bpt9','2D9'); 
 p.sol.ds=0.01; 
-p=pmcont(p,350); % hexagons // or pmcont
-plotsol('2D7','pt330',1,1,3)
+p=pmcont(p,200); %use this to reduce branch jumps
+plotsol('2D9','pt200',1,1,3)
 
-%% This gives nice HEXAGONS
-p0=qswibra('init','bpt19'); %(cswibra works as well)
-p=seltau(p0,1,'2D19',1); 
-p.sol.ds=0.01; 
-p=pmcont(p,300); % hexagons // or pmcont
-plotsol('2D19','pt270',1,1,3)
+%% c5: switch branch to periodic bifurcation branches and continue 
+% at bpt33 k_0=2, thus critical M^*(k_0)=20
+% we expect 3 dim kernel but here we only get hexagons and 
+% at close-by bpt33 we get rectangular pattern
+% at (a bit less) close-by bpt35 we get roll waves
+p=swibra('init','bpt34','2D34'); 
+p.sol.ds=0.01;
+p=pmcont(p,300); 
+plotsol('2D34','pt300',1,1,3)
 
-%% WORKS FOR SQUARE
-% p0=cswibra('init','bpt9'); 
-% p=seltau(p0, 3,'2D9',3); 
-% p.sol.ds=0.01; 
-% p=pmcont(p,200); % hexagons // or pmcont
-% plotsol('2D9','pt200',1,1,3)
 %% c6: plot bifurcation diagram
 % hold on;
 % plotbra('init','cl','k');

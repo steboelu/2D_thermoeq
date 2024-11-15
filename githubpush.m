@@ -5,3 +5,5 @@ system("git commit -m "" "+ msg + " ""  ");
 
 % equivalent to !git push in terminal
 system("git push");
+
+%%% Note: type '!git pull' in terminal to pull
