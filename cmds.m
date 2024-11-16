@@ -38,7 +38,7 @@ para = 1;           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,900);    % 900 need to find bpt35
+p = cont(p,900);    % 900 needed to find bpt35
 
 %% c3: switch branch to periodic bifurcation branches and continue 
 % at bpt3 k_0=1/2, thus critical M^*(k_0)=5
