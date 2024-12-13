@@ -60,7 +60,7 @@ p=pmcont(p,200); %use this to reduce branch jumps
 plotsol('2D9','pt200',1,1,3)
 
 %% c5: switch branch to periodic bifurcation branches and continue 
-% at bpt33 k_0=2, thus critical M^*(k_0)=20
+% at bpt34 k_0=2, thus critical M^*(k_0)=20
 % we expect 3 dim kernel but here we only get hexagons and 
 % at close-by bpt33 we get rectangular pattern
 % at (a bit less) close-by bpt35 we get roll waves
