@@ -33,7 +33,7 @@ ginit = 1;          % set gravitiy constant
 lambdaInit = 0;     % set initial integration constant (lambda = K - K(0))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
-p = setfn(p,'init');
+p = setfn(p,'init-hex');
 para = 1;           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
@@ -42,14 +42,14 @@ p = cont(p,50);    % 900 needed to find bpt35; not anymore: focus on bifurcation
 
 %% film-rupture through up-hexagons
 
-p0=qswibra('init','bpt1');
+p0=qswibra('init-hex','bpt1');
 p=gentau(p0,[1,1],'maybe-hex-up');  % original tangent directions are \phi_1 = cos(k_1*(x,y)) and \phi_2 = cos(k_2*(x,y))+cos(k_3*(x,y)). Generate tanget direction \phi_1 + \phi_2, which are hexagons
 p.sol.ds=0.001;
 p=pmcont(p,300);
 
 %% film-rupture through down-hexagons
 
-p0=qswibra('init','bpt1');
+p0=qswibra('init-hex','bpt1');
 p=gentau(p0,[1,1],'maybe-hex-down'); % see above
 p.sol.ds=-0.001;
 p=pmcont(p,300);
@@ -64,7 +64,7 @@ saveas(gcf,'film-rupture-hex-down','epsc');
 %%  plot bifurcation diagram for hexagon film rupture
 
 hold on;
-plotbra('init','cl','k');
+plotbra('init-hex','cl','k');
 plotbra('maybe-hex-up','cl','b');
 plotbra('maybe-hex-down','cl','b');
 
