@@ -27,8 +27,8 @@ saveData = 0;
 p = [];
 lx = [2*pi (2/sqrt(3))*pi];   % set domain size
 % lx = [2*pi 2*pi];   % SQUARE
-nx = [30 30];     % number of discretisation points per dimension in domain
-Minit = 3.9;          % initial Marangoni number
+nx = [100 100];     % number of discretisation points per dimension in domain
+Minit = 7.8;          % initial Marangoni number
 ginit = 1;          % set gravitiy constant
 lambdaInit = 0;     % set initial integration constant (lambda = K - K(0))
 par = [Minit, ginit, lambdaInit];
@@ -38,36 +38,67 @@ para = 1;           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,900);    % 900 needed to find bpt35
+p = cont(p,50);    % 900 needed to find bpt35; not anymore: focus on bifurcation point at M = 8 (one full hexagon)
+
+%% film-rupture through up-hexagons
+
+p0=qswibra('init','bpt1');
+p=gentau(p0,[1,1],'maybe-hex-up');  % original tangent directions are \phi_1 = cos(k_1*(x,y)) and \phi_2 = cos(k_2*(x,y))+cos(k_3*(x,y)). Generate tanget direction \phi_1 + \phi_2, which are hexagons
+p.sol.ds=0.001;
+p=pmcont(p,300);
+
+%% film-rupture through down-hexagons
+
+p0=qswibra('init','bpt1');
+p=gentau(p0,[1,1],'maybe-hex-down'); % see above
+p.sol.ds=-0.001;
+p=pmcont(p,300);
+
+%% plot solutions
+
+plotsol('maybe-hex-up','pt224',1,1,3);
+saveas(gcf,'film-rupture-hex-up','epsc');
+plotsol('maybe-hex-down','pt275',1,1,3);
+saveas(gcf,'film-rupture-hex-down','epsc');
+
+%%  plot bifurcation diagram for hexagon film rupture
+
+hold on;
+plotbra('init','cl','k');
+plotbra('maybe-hex-up','cl','b');
+plotbra('maybe-hex-down','cl','b');
+
+saveas(gcf,'bifurcation-diag-hexagons','epsc');
 
 %% c3: switch branch to periodic bifurcation branches and continue 
 % at bpt3 k_0=1/2, thus critical M^*(k_0)=5
 % 3 dim kernel: roll waves (1) and half hexagon and flipped half hexagon (2,3)
 % weird: going in first direction we remain on trivial branch
-p0=qswibra('init','bpt3'); 
-p=seltau(p0,2,'2D3',2); 
-p.sol.ds=0.01; 
-p=pmcont(p,150); 
-plotsol('2D3','pt150',1,1,3)
-
-%% c4: switch branch to periodic bifurcation branches and continue 
-% at bpt9 k_0=1, thus critical M^*(k_0)=8
-% we expect 2 dim kernel but here we only get hexagons and at close-by bpt10
-% we get roll waves
-p=swibra('init','bpt9','2D9'); 
-p.sol.ds=0.01; 
-p=pmcont(p,200); %use this to reduce branch jumps
-plotsol('2D9','pt200',1,1,3)
-
-%% c5: switch branch to periodic bifurcation branches and continue 
-% at bpt34 k_0=2, thus critical M^*(k_0)=20
-% we expect 3 dim kernel but here we only get hexagons and 
-% at close-by bpt33 we get rectangular pattern
-% at (a bit less) close-by bpt35 we get roll waves
-p=swibra('init','bpt34','2D34'); 
-p.sol.ds=0.01;
-p=pmcont(p,300); 
-plotsol('2D34','pt300',1,1,3)
+% p0=qswibra('init','bpt3'); 
+% p=seltau(p0,2,'2D3',2); 
+% p.sol.ds=-0.01; 
+% p=pmcont(p,150); 
+% plotsol('2D3','pt150',1,1,3)
+% 
+% %% c4: switch branch to periodic bifurcation branches and continue 
+% % at bpt9 k_0=1, thus critical M^*(k_0)=8
+% % we expect 2 dim kernel but here we only get hexagons and at close-by bpt10
+% % we get roll waves
+% p=swibra('init','bpt10','2D9'); 
+% p.sol.ds=-0.01; 
+% p=pmcont(p,1); %use this to reduce branch jumps
+% % plotsol('2D9','pt100',1,1,3)
+% 
+% 
+% %% c5: switch branch to periodic bifurcation branches and continue 
+% % at bpt34 k_0=2, thus critical M^*(k_0)=20
+% % we expect 3 dim kernel but here we only get hexagons and 
+% % at close-by bpt33 we get rectangular pattern
+% % at (a bit less) close-by bpt35 we get roll waves
+% p=swibra('init','bpt33','2D34'); 
+% p.sol.ds=0.01;
+% p=pmcont(p,300); 
+% plotsol('2D34','pt300',1,1,3)
 
 %% c6: plot bifurcation diagram
 % hold on;
