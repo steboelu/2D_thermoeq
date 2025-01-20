@@ -9,10 +9,10 @@ function q=qf(p,u)
 %       continuation data
 %   u : solution (entries 1:p.np) and parameters (entries (p.nu+1:end))
 %
-% Ouput:
+% Output:
 %   q : current mass
 %
 
-u=u(1:p.nu);        % extract solution
-q=p.mat.vM*u/p.vol; % calculate mass
+u=u(1:p.nu);                    % extract solution
+q=p.mat.vM*u/p.vol;             % calculate mass
 end

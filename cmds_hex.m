@@ -1,0 +1,97 @@
+%% main command file for the bifurcation analysis of a 2D thermocapillary thin-film equation
+% 
+% There are two main command files:
+% - cmds_hex is set up to detect hexagonal patterns
+% - cmds_squ is set up to detect square patterns
+%
+% The command file performs a numerical continuation of the second order
+% equation
+%
+%   0 = \Delta v - gv + M*( 1/(2+v) + log((1+v)/(2+v)) ) - M*K(0) + lambda
+%
+% Here, 1+v is the fluid height, g is the gravitation constant, M is the
+% Marangoni number (the primary bifurcation parameter), and lambda is a
+% constant to conserve the mass of the bifurcating solution.
+%
+% The numerical continuation is performed with pde2path with Neuman
+% boundary conditions on a domain (-lx,lx)x(-ly,ly). 
+
+%% clear mainspace (keep paths for pde2path) and close all plot windows
+clc;
+close all;
+keep pphome;
+
+% set to 1 to save plotted figures as eps
+saveFigures = 1;
+% set to 1 to save plot data
+saveData = 1;
+
+%% c1: init and set parameters
+p = [];
+lx = [2*pi (2/sqrt(3))*pi];         % set domain size; this ratio allows for hexagonal pattern
+nx = [100 100];                     % number of discretisation points per dimension in domain
+Minit = 7.8;                        % initial Marangoni number
+ginit = 1;                          % set gravitational constant
+lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
+par = [Minit, ginit, lambdaInit];   
+p = tfinit(p,lx,nx,par);
+p = setfn(p,'init-hex');
+para = 1;                           % set Marangoni number as bifurcation parameter
+p.nc.dsmax=0.03;
+                                                                                                    
+%% c2: continuation of the trivial branch
+p = cont(p,50);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
+
+%% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through 
+% a) up-hexagons
+p0=qswibra('init-hex','bpt1');
+p=gentau(p0,[1,1],'hex-up');  % Detected tangent directions are \phi_1 = cos(k_1*(x,y)) and \phi_2 = cos(k_2*(x,y))+cos(k_3*(x,y)). 
+%                               Generate tanget direction \phi_1 + \phi_2, which yields hexagons.
+p.sol.ds=0.001;
+p=pmcont(p,300);
+
+% b) down-hexagons
+p0=qswibra('init-hex','bpt1');
+p=gentau(p0,[1,1],'hex-down'); % see above
+p.sol.ds=-0.001;
+p=pmcont(p,300);
+
+%% c4: plot bifurcation diagram hexagons
+hold on;
+plotbra('init-hex','cl','k');
+plotbra('hex-up','cl','b');
+plotbra('hex-down','cl','b');
+hold off;
+
+% save bifurcation diagram as eps
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'bifurcation-diag-hex','epsc');
+end
+
+%% c5: plot solutions
+% a) close to the bifurcation point
+plotsol('hex-up','pt4',1,1,3);
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'small-hex-up','epsc');
+end
+plotsol('hex-down','pt5',1,1,3);
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'small-hex-down','epsc');
+end
+
+% b) 'film-rupture' solution
+plotsol('hex-up','pt224',1,1,3);
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'film-rupture-hex-up','epsc');
+end
+plotsol('hex-down','pt275',1,1,3);
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'film-rupture-hex-down','epsc');
+end
+
+% %% export of plot data

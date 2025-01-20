@@ -10,7 +10,7 @@ function p = tfinit(p,lx,nx,par)
 %   nx: number of (spatial) grid points per dimension             
 %   par : initial values of problem parameters (here: M,g,lambda)
 %
-% Output:
+% Ouput:
 %   p : initialized 'p' variable of pde2path
 %
 

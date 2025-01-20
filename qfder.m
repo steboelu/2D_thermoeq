@@ -9,7 +9,7 @@ function qu=qfder(p,u)
 %       continuation data
 %   u : solution (entries 1:p.np) and parameters (entries (p.nu+1:end))
 %
-% Ouput:
+% Output:
 %   qu : derivative of mass function
 %
 
