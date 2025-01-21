@@ -74,71 +74,59 @@ end
 saveas(gcf,'film-rupture-squ','epsc')
 
 %% c7: export of plot data
-% % extract and save solution data.
-% 
-% % interpolation grid with finer mesh close to 0 (where the minimum will be located in the plot).
-% % This allows to reduce the number of points necessary for the plot to look 'smooth'
-% xInterpLeft = [linspace(-lx,-0.5,50),linspace(-0.5,0,200)];
-% xInterpRight = [linspace(0,0.5,200),linspace(0.5,lx,50)];
-% 
-% % set up temporary fine mesh
-% xTempLeft = linspace(-lx,0,1000);
-% xTempRight = linspace(0,lx,1000);
-% 
-% % load solution close to bifurcation point
-% data_1D2_pt5 = loadp('1D2','pt5');
-% % interpolate solution to temporary mesh and shifting solution by a half-period
-% soltemp = [interp1(data_1D2_pt5.pdeo.grid.p,data_1D2_pt5.u(1:end-3),xTempLeft(1:end-1)),interp1(data_1D2_pt5.pdeo.grid.p,data_1D2_pt5.u(1:end-3),xTempRight(2:end))];
-% % interpolate to final mesh and save grid points and solution points
-% solpt5 = [xInterpLeft,xInterpRight;...
-%     interp1([xTempRight(2:end),xTempLeft(1:end-1)],soltemp,xInterpLeft),interp1([xTempRight(2:end),xTempLeft(1:end-1)],soltemp,xInterpRight)];
-% 
-% % load 'film-rupture' solution
-% data_1D2_pt40 = loadp('1D2','pt40');
-% % interpolate solution to temporary mesh and shifting solution by a
-% % half-period
-% soltemp = [interp1(data_1D2_pt40.pdeo.grid.p,data_1D2_pt40.u(1:end-3),xTempLeft(1:end-1)),interp1(data_1D2_pt40.pdeo.grid.p,data_1D2_pt40.u(1:end-3),xTempRight(2:end))];
-% % interpolate to final mesh and save grid points and solution points
-% solpt40 = [xInterpLeft,xInterpRight;...
-%     interp1([xTempRight(2:end),xTempLeft(1:end-1)],soltemp,xInterpLeft),interp1([xTempRight(2:end),xTempLeft(1:end-1)],soltemp,xInterpRight)];
-% 
-% 
-% % extract bifurcation branch data
-% data_init = loadpp('init');
-% brainit = data_init.branch([4,6],:);
-% 
-% data_1D2 = loadpp('1D2');
-% bra1D2 = data_1D2.branch([4,6],:);
-% 
-% data_1D4 = loadpp('1D4');
-% bra1D4 = data_1D4.branch([4,6],:);
-% 
-% data_1D6 = loadpp('1D6');
-% bra1D6 = data_1D6.branch([4,6],:);
-% 
-% % write data to text files
-% if saveData
-%     formatSpec = '(%5.5f,%5.5f) ';
-% 
-%     fileID = fopen('branchData.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' braInit ','==================']);
-%     fprintf(fileID,formatSpec,brainit);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' bra1D2 ','==================']);
-%     fprintf(fileID,formatSpec,bra1D2);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' bra1D4 ','==================']);
-%     fprintf(fileID,formatSpec,bra1D4);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' bra1D6 ','==================']);
-%     fprintf(fileID,formatSpec,bra1D6);
-%     fclose(fileID);
-% 
-%     fileID = fopen('solutionData.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' solution pt5 ','==================']);
-%     fprintf(fileID,formatSpec,solpt5);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution pt40 ','==================']);
-%     fprintf(fileID,formatSpec,solpt40);
-%     fclose(fileID);
-% end
+% extract and save solution data.
+
+% interpolation grid with finer mesh close to ---corners--- (where the minimum will be located in the plot).
+% This allows to reduce the number of points necessary for the plot to look 'smooth'
+xmax=lx(1);
+ymax=lx(2);
+
+xInterpLeft = [linspace(-xmax,-xmax+0.5,200),linspace(-xmax+0.5,0,50)];
+xInterpRight = [linspace(0,xmax-0.5,50),linspace(xmax-0.5,xmax,200)];
+yInterpBott = [linspace(-ymax,-ymax+0.5,200),linspace(-ymax+0.5,0,50)];
+yInterpTop = [linspace(0,ymax-0.5,50),linspace(ymax-0.5,ymax,200)];
+
+% set up temporary fine mesh
+xTempLeft = linspace(-xmax,0,1000);
+xTempRight = linspace(0,xmax,1000);
+yTempBott = linspace(-ymax,0,1000);
+yTempTop = linspace(0,ymax,1000);
+
+% load solution close to bifurcation point
+data_squ_pt5 = loadp('squ','pt5');
+% interpolate solution to temporary mesh
+soltemp = [interp2(data_squ_pt5.pdeo.grid.p(1),data_squ_pt5.pdeo.grid.p(2),data_squ_pt5.u(1:end-3),xTempLeft(1:end-1),yTempBott(1:end-1)),...   % bottom left
+           interp2(data_squ_pt5.pdeo.grid.p(1),data_squ_pt5.pdeo.grid.p(2),data_squ_pt5.u(1:end-3),xTempRight(2:end),yTempBott(1:end-1)),...    % bottom right
+           interp2(data_squ_pt5.pdeo.grid.p(1),data_squ_pt5.pdeo.grid.p(2),data_squ_pt5.u(1:end-3),xTempLeft(1:end-1),yTempTop(2:end)),...      % top left
+           interp2(data_squ_pt5.pdeo.grid.p(1),data_squ_pt5.pdeo.grid.p(2),data_squ_pt5.u(1:end-3),xTempRight(2:end),yTempUp(2:end))];          % top right
+% interpolate to final mesh and save grid points and solution points
+sol_squ_pt5 = [xInterpLeft,xInterpRight,yInterpBott,yInterpTop;...
+    interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpLeft,yInterpBott),...
+    interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpRight,yInterpBott),...
+    interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpLeft,yInterpTop),...
+    interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpRight,yInterpTop)];
+
+% extract bifurcation branch data
+data_init = loadpp('init-squ');
+brainit = data_init.branch([4,6],:);
+
+data_squ = loadpp('squ');
+bra_squ = data_1D2.branch([4,6],:);
+
+% write data to text files
+if saveData
+    formatSpec = '(%5.5f,%5.5f) ';
+
+    fileID = fopen('branchData.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' braInit ','==================']);
+    fprintf(fileID,formatSpec,brainit);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra1D2 ','==================']);
+    fprintf(fileID,formatSpec,bra_squ);
+    fclose(fileID);
+
+    fileID = fopen('solutionData.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
+    fprintf(fileID,formatSpec,sol_squ_pt5);
+    fclose(fileID);
+end
