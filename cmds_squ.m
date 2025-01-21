@@ -28,89 +28,52 @@ saveData = 1;
 
 %% c1: init and set parameters
 p = [];
-lx = [2*pi 2*pi];               % set domain size; this ratio does not allow for hexagonal pattern
-nx = [100 100];                   % number of discretisation points per dimension in domain
-Minit = 4.9;                    % initial Marangoni number
-ginit = 1;                      % set gravitational constant
-lambdaInit = 0;                 % set initial integration constant (lambda = M*( K(0) - K ))
+lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
+nx = [100 100];                     % number of discretisation points per dimension in domain
+Minit = 4.9;                        % initial Marangoni number
+ginit = 1;                          % set gravitational constant
+lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
 p = setfn(p,'init-squ');
-para = 1;                       % set Marangoni number as bifurcation parameter
+para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,15);                % set up to detect bifurcation point at M = ?????? (one full hexagon)
+p = cont(p,15);                     % set up to detect bifurcation point at M = 5 (one full square)
 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through squares
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
 p.sol.ds=0.01; 
-p=pmcont(p,200); 
+p=pmcont(p,120); 
 
 %% c4: plot bifurcation diagram squares
 hold on;
-plotbra('init','cl','k');
+plotbra('init-squ','cl','k');
 plotbra('squ','cl','b');
 hold off;
-
 % save bifurcation diagram as eps
 if saveFigures
     set(gcf,'position',[0,0,500,400])
     saveas(gcf,'bifurcation-diag-squ','epsc');
 end
 
-%% c5: plot solutions
-% a) close to the bifurcation point
+%% c5: plot solution close to the bifurcation point
 if saveFigures
     set(gcf,'position',[0,0,500,400])
     plotsol('squ','pt5',1,1,3)
 end
 saveas(gcf,'small-squ','epsc')
-%%
-% b) 'film-rupture' solution
+
+%% c6: plot solution close to film-rupture
 if saveFigures
     set(gcf,'position',[0,0,500,400])
     plotsol('squ','pt119',1,1,3)
 end
 saveas(gcf,'film-rupture-squ','epsc')
 
-
-% % plot bifurcating solution close to the bifurcation point
-% p2 = loadp('1D2','pt5');
-% % figure(4) %%%%%%%%%%%%%%%%%%%% commented out
-% % plot solution shifted by a half-period (so that minimum is at x=0)
-% templx=lx(1)
-% plot(p2.pdeo.grid.p+templx*ones(size(p2.pdeo.grid.p)),p2.u(1:end-3),'k',...
-%     p2.pdeo.grid.p-templx*ones(size(p2.pdeo.grid.p)),p2.u(1:end-3),'k');
-% xlim([-lx(1),lx(1)]);
-% ylim([-lx(2),lx(2)]);
-% title('Solution plot at pt5');
-
-% % save plot as eps
-% if saveFigures
-%     set(gcf,'position',[0,0,500,200])
-%     saveas(gcf,'sol-pt5','epsc');
-% end
-
-
-% % plot 'film-rupture' solution
-% p2 = loadp('1D2','pt40');
-% figure(5)
-% % plot solution shifted by a half-period (so that minimum is at x=0)
-% plot(p2.pdeo.grid.p+lx*ones(size(p2.pdeo.grid.p)),p2.u(1:end-3),'k',...
-%     p2.pdeo.grid.p-lx*ones(size(p2.pdeo.grid.p)),p2.u(1:end-3),'k');
-% xlim([-lx,lx]);
-% ylim([-1,0.5]);
-% title('Solution plot at pt40');
-
-% % save plot as eps
-% if saveFigures
-%     set(gcf,'position',[0,0,500,200])
-%     saveas(gcf,'sol-pt40','epsc');
-% end
-
-% %% export of plot data
+%% c7: export of plot data
 % % extract and save solution data.
 % 
 % % interpolation grid with finer mesh close to 0 (where the minimum will be located in the plot).

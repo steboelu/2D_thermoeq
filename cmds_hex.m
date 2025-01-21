@@ -40,21 +40,20 @@ para = 1;                           % set Marangoni number as bifurcation parame
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,50);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
+p = cont(p,25);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
 
-%% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through 
-% a) up-hexagons
+%% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through up-hexagons
 p0=qswibra('init-hex','bpt1');
-p=gentau(p0,[1,1],'hex-up');  % Detected tangent directions are \phi_1 = cos(k_1*(x,y)) and \phi_2 = cos(k_2*(x,y))+cos(k_3*(x,y)). 
-%                               Generate tanget direction \phi_1 + \phi_2, which yields hexagons.
-p.sol.ds=0.001;
-p=pmcont(p,300);
+p=gentau(p0,[1,1],'hex-up');        % Detected tangent directions are \phi_1 = cos(k_1*(x,y)) and \phi_2 = cos(k_2*(x,y))+cos(k_3*(x,y)). 
+%                                     Generate tanget direction \phi_1 + \phi_2, which yields hexagons.
+p.sol.ds=0.001;                     % positive for up-hexagons
+p=pmcont(p,225);
 
-% b) down-hexagons
+%% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through down-hexagons
 p0=qswibra('init-hex','bpt1');
-p=gentau(p0,[1,1],'hex-down'); % see above
-p.sol.ds=-0.001;
-p=pmcont(p,300);
+p=gentau(p0,[1,1],'hex-down');      
+p.sol.ds=-0.001;                    % negative for down-hexagons
+p=pmcont(p,276);
 
 %% c4: plot bifurcation diagram hexagons
 hold on;
@@ -62,16 +61,14 @@ plotbra('init-hex','cl','k');
 plotbra('hex-up','cl','b');
 plotbra('hex-down','cl','b');
 hold off;
-
 % save bifurcation diagram as eps
 if saveFigures
     set(gcf,'position',[0,0,500,400])
     saveas(gcf,'bifurcation-diag-hex','epsc');
 end
 
-%% c5: plot solutions
-% a) close to the bifurcation point
-plotsol('hex-up','pt4',1,1,3);
+%% c5: plot solutions close to the bifurcation point
+plotsol('hex-up','pt5',1,1,3);      % last option 1 mesh graph, 2 contour plot, 3 graph
 if saveFigures
     set(gcf,'position',[0,0,500,400])
     saveas(gcf,'small-hex-up','epsc');
@@ -82,7 +79,14 @@ if saveFigures
     saveas(gcf,'small-hex-down','epsc');
 end
 
-% b) 'film-rupture' solution
+%% c7: plot up-hexagon at fold (M = 8.42325)
+plotsol('hex-up','fpt1',1,1,3);
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    saveas(gcf,'fold-hex-up','epsc');
+end
+
+%% c7: plot solutions close to film-rupture
 plotsol('hex-up','pt224',1,1,3);
 if saveFigures
     set(gcf,'position',[0,0,500,400])
@@ -94,4 +98,4 @@ if saveFigures
     saveas(gcf,'film-rupture-hex-down','epsc');
 end
 
-% %% export of plot data
+%% c8: export of plot data
