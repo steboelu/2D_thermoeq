@@ -46,19 +46,19 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
 p.sol.ds=0.01; 
-p=pmcont(p,300); 
+p=pmcont(p,206); 
 
-%% c-sec: secondary bifurcation
-p = swibra('squ','bpt3','square-sec-bif');
-p.sol.ds=0.01;
-p=pmcont(p,100);
-
-% plot secondary bifurcations
-if saveFigures
-    set(gcf,'position',[0,0,500,400])
-    plotsol('square-sec-bif','pt100',1,1,3,'cm','jet')
-end
-saveas(gcf,'squ-secondary-bif','epsc')
+% %% c-sec: secondary bifurcation
+% p = swibra('squ','bpt3','square-sec-bif');
+% p.sol.ds=0.01;
+% p=pmcont(p,100);
+% 
+% % plot secondary bifurcations
+% if saveFigures
+%     set(gcf,'position',[0,0,500,400])
+%     plotsol('square-sec-bif','pt100',1,1,3,'cm','jet')
+% end
+% saveas(gcf,'squ-secondary-bif','epsc')
 
 %% c4: plot bifurcation diagram squares
 hold on;
@@ -81,7 +81,7 @@ saveas(gcf,'small-squ','epsc')
 %% c6: plot solution close to film-rupture
 if saveFigures
     set(gcf,'position',[0,0,500,400])
-    plotsol('squ','pt120',1,1,2,'cm','jet')
+    plotsol('squ','pt206',1,1,3,'cm','jet')
 end
 saveas(gcf,'film-rupture-squ','epsc')
 
@@ -93,8 +93,8 @@ data_squ_pt5 = loadp('squ','pt5');
 sol_squ_pt5 = [data_squ_pt5.pdeo.grid.p;data_squ_pt5.u(1:end-3).'];
 
 % load solution close to film-rupture
-data_squ_pt202 = loadp('squ','pt202');
-sol_squ_pt202 = [data_squ_pt202.pdeo.grid.p;data_squ_pt202.u(1:end-3).'];
+data_squ_pt206 = loadp('squ','pt206');
+sol_squ_pt206 = [data_squ_pt206.pdeo.grid.p;data_squ_pt206.u(1:end-3).'];
 
 % extract bifurcation branch data
 data_init = loadpp('init-squ');
@@ -121,7 +121,7 @@ if saveData
     fclose(fileID);
 
     fileID = fopen('solutionData.txt','w');
-    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt202 ','==================']);
-    fprintf(fileID,formatSpec,sol_squ_pt202);
+    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt206 ','==================']);
+    fprintf(fileID,formatSpec,sol_squ_pt206);
     fclose(fileID);
 end
