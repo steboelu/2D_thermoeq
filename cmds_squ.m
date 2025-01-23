@@ -40,7 +40,7 @@ para = 1;                           % set Marangoni number as bifurcation parame
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,15);                     % set up to detect bifurcation point at M = 5 (one full square)
+p = cont(p,15);                     % set up to detect bifurcation point at M = 8 (two full squares)
 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through squares
 p0=cswibra('init-squ','bpt1'); 
@@ -88,80 +88,40 @@ saveas(gcf,'film-rupture-squ','epsc')
 %% c7: export of plot data
 % extract and save solution data.
 
-% interpolation grid with finer mesh close to ---corners--- (where the minimum will be located in the plot).
-% This allows to reduce the number of points necessary for the plot to look 'smooth'
-% xmax=lx(1);
-% ymax=lx(2);
-
-% xInterpLeft = [linspace(-xmax,-xmax+0.5,200),linspace(-xmax+0.5,0,50)];
-% xInterpRight = [linspace(0,xmax-0.5,50),linspace(xmax-0.5,xmax,200)];
-% yInterpBott = [linspace(-ymax,-ymax+0.5,200),linspace(-ymax+0.5,0,50)];
-% yInterpTop = [linspace(0,ymax-0.5,50),linspace(ymax-0.5,ymax,200)];
-% 
-% % set up temporary fine mesh
-% xTempLeft = linspace(-xmax,0,1000);
-% xTempRight = linspace(0,xmax,1000);
-% yTempBott = linspace(-ymax,0,1000);
-% yTempTop = linspace(0,ymax,1000);
-
 % load solution close to bifurcation point
-% data_squ_pt5 = loadp('squ','pt5');
-% interpolate solution to temporary mesh
-% soltemp = [interp2(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:),data_squ_pt5.u(1:end-3),xTempLeft(1:end-1),yTempBott(1:end-1)),...   % bottom left
-%            interp2(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:),data_squ_pt5.u(1:end-3),xTempRight(2:end),yTempBott(1:end-1)),...    % bottom right
-%            interp2(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:),data_squ_pt5.u(1:end-3),xTempLeft(1:end-1),yTempTop(2:end)),...      % top left
-%            interp2(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:),data_squ_pt5.u(1:end-3),xTempRight(2:end),yTempUp(2:end))];          % top right
-% interpolate to final mesh and save grid points and solution points
-% sol_squ_pt5 = [xInterpLeft,xInterpRight,yInterpBott,yInterpTop;...
-%     interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpLeft,yInterpBott),...
-%     interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpRight,yInterpBott),...
-%     interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpLeft,yInterpTop),...
-%     interp2([xTempLeft(1:end-1),xTempRight(2:end),yTempBott(1:end-1),yTempTop(2:end)],soltemp,xInterpRight,yInterpTop)];
+data_squ_pt5 = loadp('squ','pt5');
+sol_squ_pt5 = [data_squ_pt5.pdeo.grid.p;data_squ_pt5.u(1:end-3).'];
 
-% [X,Y] = meshgrid(linspace(-2*pi,2*pi,500),linspace(-2*pi,2*pi,500));
-% Z = interp2(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:),data_squ_pt5.u(1:end-3),X,Y);
-% 
-% fig = figure('units','pixels','position',[100 200 1000 1000]);
-% axes(fig,'units','pixels','position',[0 0 1000 1000]);
-% 
-% [X,Y] = meshgrid(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:));
-% 
-% s = surfc(data_squ_pt5.pdeo.grid.p(1,:),data_squ_pt5.pdeo.grid.p(2,:),data_squ_pt5.u(1:end-3));
-% axis off;
-% view(2);
-% pbaspect([xmax/ymax 1 1])
-% grid off;
-% s(1).EdgeColor="none";
-% colormap jet
-% % clim([-maxAmp,maxAmp]);
-% ax = gca;
-% ax.ZLim(2) = max(f(X,Y),[],"all");
-% s(2).ZLocation = 'zmax';
-% s(2).LevelList = heights;
-% s(2).EdgeColor="k";
+% load solution close to film-rupture
+data_squ_pt202 = loadp('squ','pt202');
+sol_squ_pt202 = [data_squ_pt202.pdeo.grid.p;data_squ_pt202.u(1:end-3).'];
 
+% extract bifurcation branch data
+data_init = loadpp('init-squ');
+brainit = data_init.branch([4,6],:);
 
-% % extract bifurcation branch data
-% data_init = loadpp('init-squ');
-% brainit = data_init.branch([4,6],:);
-% 
-% data_squ = loadpp('squ');
-% bra_squ = data_1D2.branch([4,6],:);
-% 
-% % write data to text files
-% if saveData
-%     formatSpec = '(%5.5f,%5.5f) ';
-% 
-%     fileID = fopen('branchData.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' braInit ','==================']);
-%     fprintf(fileID,formatSpec,brainit);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' bra1D2 ','==================']);
-%     fprintf(fileID,formatSpec,bra_squ);
-%     fclose(fileID);
-% 
-%     fileID = fopen('solutionData.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
-%     fprintf(fileID,formatSpec,sol_squ_pt5);
-%     fclose(fileID);
-% end
+data_squ = loadpp('squ');
+bra_squ = data_squ.branch([4,6],:);
+
+% write data to text files
+if saveData
+    formatSpec = '(%5.5f,%5.5f) ';
+
+    fileID = fopen('branchData.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' brainit ','==================']);
+    fprintf(fileID,formatSpec,brainit);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_squ ','==================']);
+    fprintf(fileID,formatSpec,bra_squ);
+    fclose(fileID);
+
+    fileID = fopen('solutionData.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
+    fprintf(fileID,formatSpec,sol_squ_pt5);
+    fclose(fileID);
+
+    fileID = fopen('solutionData.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt202 ','==================']);
+    fprintf(fileID,formatSpec,sol_squ_pt202);
+    fclose(fileID);
+end
