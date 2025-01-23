@@ -48,7 +48,7 @@ p=seltau(p0, 2,'squ',3);
 p.sol.ds=0.01; 
 p=pmcont(p,206); 
 
-% %% c-sec: secondary bifurcation
+% %% c-sec: secondary bifurcation %%%% find only something weird
 % p = swibra('squ','bpt3','square-sec-bif');
 % p.sol.ds=0.01;
 % p=pmcont(p,100);
@@ -107,7 +107,7 @@ bra_squ = data_squ.branch([4,6],:);
 if saveData
     formatSpec = '(%5.5f,%5.5f) ';
 
-    fileID = fopen('branchData.txt','w');
+    fileID = fopen('branchDataSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' brainit ','==================']);
     fprintf(fileID,formatSpec,brainit);
 
@@ -115,13 +115,11 @@ if saveData
     fprintf(fileID,formatSpec,bra_squ);
     fclose(fileID);
 
-    fileID = fopen('solutionData.txt','w');
+    fileID = fopen('solutionDataSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
     fprintf(fileID,formatSpec,sol_squ_pt5);
-    fclose(fileID);
 
-    fileID = fopen('solutionData.txt','w');
-    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt206 ','==================']);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares pt206 ','==================']);
     fprintf(fileID,formatSpec,sol_squ_pt206);
     fclose(fileID);
 end
