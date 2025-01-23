@@ -46,7 +46,7 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
 p.sol.ds=0.01; 
-p=pmcont(p,120); 
+p=pmcont(p,300); 
 
 %% c-sec: secondary bifurcation
 p = swibra('squ','bpt2','square-sec-bif');
@@ -78,7 +78,12 @@ if saveFigures
 end
 saveas(gcf,'film-rupture-squ','epsc')
 
-%% c
+%% c7: plot secondary bifurcations
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    plotsol('square-sec-bif','pt100',1,1,2,'cm','jet')
+end
+saveas(gcf,'squ-secondary-bif','epsc')
 
 %% c7: export of plot data
 % extract and save solution data.

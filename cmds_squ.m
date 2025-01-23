@@ -30,7 +30,7 @@ saveData = 1;
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
 nx = [100 100];                     % number of discretisation points per dimension in domain
-Minit = 4.9;                        % initial Marangoni number
+Minit = 7.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
@@ -46,12 +46,19 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
 p.sol.ds=0.01; 
-p=pmcont(p,120); 
+p=pmcont(p,300); 
 
 %% c-sec: secondary bifurcation
-p = swibra('squ','bpt2','square-sec-bif');
+p = swibra('squ','bpt3','square-sec-bif');
 p.sol.ds=0.01;
 p=pmcont(p,100);
+
+% plot secondary bifurcations
+if saveFigures
+    set(gcf,'position',[0,0,500,400])
+    plotsol('square-sec-bif','pt100',1,1,3,'cm','jet')
+end
+saveas(gcf,'squ-secondary-bif','epsc')
 
 %% c4: plot bifurcation diagram squares
 hold on;
@@ -77,13 +84,6 @@ if saveFigures
     plotsol('squ','pt120',1,1,2,'cm','jet')
 end
 saveas(gcf,'film-rupture-squ','epsc')
-
-%% c7: plot secondary bifurcations
-if saveFigures
-    set(gcf,'position',[0,0,500,400])
-    plotsol('square-sec-bif','pt100',1,1,2,'cm','jet')
-end
-saveas(gcf,'squ-secondary-bif','epsc')
 
 %% c7: export of plot data
 % extract and save solution data.
