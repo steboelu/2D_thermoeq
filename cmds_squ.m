@@ -45,7 +45,7 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through squares
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
-p.sol.ds=0.01; 
+p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
 p=pmcont(p,206); 
 
 %% c-sec: secondary bifurcation
