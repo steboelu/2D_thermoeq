@@ -29,13 +29,16 @@ saveData = 1;
 %% c1: init and set parameters
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
-nx = [100 100];                     % number of discretisation points per dimension in domain
-Minit = 7.9;                        % initial Marangoni number
+% nx = [100 100];                     % number of discretisation points per dimension in domain
+nx = [200 200];                     % number of discretisation points per dimension in domain
+% Minit = 7.9;                        % initial Marangoni number
+Minit = 12.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
-p = setfn(p,'init-squ');
+% p = setfn(p,'init-squ');
+p = setfn(p,'init-M13squ');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
@@ -43,18 +46,37 @@ p.nc.dsmax=0.03;
 p = cont(p,15);                     % set up to detect bifurcation point at M = 8 (two full squares)
 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through squares
-p0=cswibra('init-squ','bpt1'); 
-p=seltau(p0, 2,'squ',3); 
-p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
-p=pmcont(p,206); 
-
-%% c-sec: secondary bifurcation
-% bpt3 admissible pattern with 8 min around a max
-% bpt1 rolls, bpt2,6,7,8 weird, 
-% bpt4 no sol, bpt5 nothing
-p = swibra('squ','bpt3','square-sec-bif');
+% p0=cswibra('init-squ','bpt1'); 
+% p=seltau(p0, 2,'squ',3); 
+% p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
+% p=pmcont(p,206); 
+p0 = cswibra('init-M13squ','bpt1');
+p=seltau(p0, 2,'M13squ',3);
 p.sol.ds=0.01;
 p=pmcont(p,100);
+
+%% c-sec: secondary bifurcation
+% % bpt3 admissible pattern with 8 min around a max
+% % bpt1 rolls, bpt2,6,7,8 weird, 
+% % bpt4 no sol, bpt5 nothing
+% p = swibra('squ','bpt3','square-sec-bif');
+% p.sol.ds=0.01;
+% p=pmcont(p,100);
+
+% here a global max is surrounded by an annullar local min, 
+% and 12 local min in a square arrangement. use -ds next time to have max at centre 
+p = swibra('M13squ','bpt3','M13square-sec-bif-bpt3');
+p.sol.ds=0.01;
+p=pmcont(p,100);
+
+% % this is not an admissible bifurcation
+% p = swibra('M13squ','bpt4','M13square-sec-bif-bpt4');
+% p.sol.ds=0.-01;
+% p=pmcont(p,100);
+
+% %%
+% plotsol('M13square-sec-bif-bpt3','pt60',1,1,2,'cm','jet')
+% saveas(gcf,'M13square-sec-bif-bpt3-pt60','epsc')
 
 %% c4: plot bifurcation diagram squares
 hold on;
