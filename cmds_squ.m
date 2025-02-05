@@ -29,16 +29,16 @@ saveData = 1;
 %% c1: init and set parameters
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
-% nx = [100 100];                     % number of discretisation points per dimension in domain
-nx = [200 200];                     % number of discretisation points per dimension in domain
-% Minit = 7.9;                        % initial Marangoni number
-Minit = 12.9;                        % initial Marangoni number
+nx = [100 100];                     % number of discretisation points per dimension in domain
+% nx = [200 200];                     % number of discretisation points per dimension in domain
+Minit = 7.9;                        % initial Marangoni number
+% Minit = 12.9;                       % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
-% p = setfn(p,'init-squ');
-p = setfn(p,'init-M13squ');
+p = setfn(p,'init-squ');
+% p = setfn(p,'init-M13squ');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
@@ -46,28 +46,28 @@ p.nc.dsmax=0.03;
 p = cont(p,15);                     % set up to detect bifurcation point at M = 8 (two full squares)
 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through squares
-% p0=cswibra('init-squ','bpt1'); 
-% p=seltau(p0, 2,'squ',3); 
-% p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
-% p=pmcont(p,206); 
-p0 = cswibra('init-M13squ','bpt1');
-p=seltau(p0, 2,'M13squ',3);
-p.sol.ds=0.01;
-p=pmcont(p,100);
-
-%% c-sec: secondary bifurcation
-% % bpt3 admissible pattern with 8 min around a max
-% % bpt1 rolls, bpt2,6,7,8 weird, 
-% % bpt4 no sol, bpt5 nothing
-% p = swibra('squ','bpt3','square-sec-bif');
+p0=cswibra('init-squ','bpt1'); 
+p=seltau(p0, 2,'squ',3); 
+p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
+p=pmcont(p,206); 
+% p0 = cswibra('init-M13squ','bpt1');
+% p=seltau(p0, 2,'M13squ',3);
 % p.sol.ds=0.01;
 % p=pmcont(p,100);
 
-% here a global max is surrounded by an annullar local min, 
-% and 12 local min in a square arrangement. use -ds next time to have max at centre 
-p = swibra('M13squ','bpt3','M13square-sec-bif-bpt3');
+%% c-sec: secondary bifurcation
+% bpt3 admissible pattern with 8 min around a max
+% bpt1 rolls, bpt2,6,7,8 weird, 
+% bpt4 no sol, bpt5 nothing
+p = swibra('squ','bpt3','square-sec-bif');
 p.sol.ds=0.01;
-p=pmcont(p,100);
+p=pmcont(p,121);
+
+% % here a global max is surrounded by an annullar local min, 
+% % and 12 local min in a square arrangement. use -ds next time to have max at centre 
+% p = swibra('M13squ','bpt3','M13square-sec-bif-bpt3');
+% p.sol.ds=0.01;
+% p=pmcont(p,100);
 
 % % this is not an admissible bifurcation
 % p = swibra('M13squ','bpt4','M13square-sec-bif-bpt4');
@@ -82,29 +82,55 @@ p=pmcont(p,100);
 hold on;
 plotbra('init-squ','cl','k');
 plotbra('squ','cl','b');
+plotbra('square-sec-bif','cl','b');
 hold off;
 % save bifurcation diagram as eps
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'bifurcation-diag-squ','epsc');
 end
 
 %% c5: plot solution close to the bifurcation point
+plotsol('squ','pt5',1,1,2,'cm','jet')
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
-    plotsol('squ','pt5',1,1,2,'cm','jet')
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'small-squ','epsc')
 end
-saveas(gcf,'small-squ','epsc')
 
 %% c6: plot solution close to film-rupture
+plotsol('squ','pt206',1,1,3,'cm','jet')
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
-    plotsol('squ','pt206',1,1,3,'cm','jet')
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'film-rupture-squ','epsc')
 end
-saveas(gcf,'film-rupture-squ','epsc')
 
-%% c7: export of plot data
+%% c7: plot sec-bif solution close to film-rupture
+plotsol('squ','bpt3',1,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'bpt3-squ','epsc')
+end
+plotsol('square-sec-bif','pt10',2,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'sec-squ-pt10','epsc')
+end
+plotsol('square-sec-bif','pt25',3,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'sec-squ-pt25','epsc')
+end
+plotsol('square-sec-bif','pt120',4,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'film-rupture-sec-squ','epsc')
+end
+
+
+%% c8: export of plot data
 % extract and save solution data.
+
+%TODO: add secondary bif stuff
 
 % load solution close to bifurcation point
 data_squ_pt5 = loadp('squ','pt5');

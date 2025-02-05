@@ -75,14 +75,14 @@ plotbra('hex-down','cl','b');
 hold off;
 % save bifurcation diagram as eps
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'bifurcation-diag-hex','epsc');
 end
 
 %% c6: plot up-hexagon close to the bifurcation point
-plotsol('hex-up','pt5',1,1,2);      % last option 1 mesh graph, 2 contour plot, 3 graph
+plotsol('hex-up','pt5',1,1,2,'cm','jet');      % last option 1 mesh graph, 2 contour plot, 3 graph
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'small-hex-up','epsc');
 end
 
@@ -94,23 +94,23 @@ if saveFigures
 end
 
 %% c8: plot up-hexagon close to film-rupture
-plotsol('hex-up','pt224',1,1,3);
+plotsol('hex-up','pt224',1,1,3,'cm','jet');
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'film-rupture-hex-up','epsc');
 end
 
 %% c9: plot down-hexagon close to the bifurcation point
-plotsol('hex-down','pt5',1,1,3);
+plotsol('hex-down','pt5',1,1,2,'cm','jet');
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'small-hex-down','epsc');
 end
 
 %% c10: plot down-hexagon close to film-rupture
-plotsol('hex-down','pt275',1,1,3);
+plotsol('hex-down','pt275',1,1,3,'cm','jet');
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'film-rupture-hex-down','epsc');
 end
 
