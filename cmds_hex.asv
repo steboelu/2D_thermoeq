@@ -30,17 +30,20 @@ saveData = 1;
 p = [];
 lx = [2*pi (2/sqrt(3))*pi];         % set domain size; this ratio allows for hexagonal pattern
 nx = [100 100];                     % number of discretisation points per dimension in domain
+% nx = [300 300];                     % number of discretisation points per dimension in domain
 Minit = 7.8;                        % initial Marangoni number
+% Minit = 12.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];   
 p = tfinit(p,lx,nx,par);
 p = setfn(p,'init-hex');
+% p = setfn(p,'init-M13hex');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,25);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
+p = cont(p,15);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through up-hexagons
 p0=qswibra('init-hex','bpt1');
@@ -49,11 +52,37 @@ p=gentau(p0,[1,1],'hex-up');        % Detected tangent directions are \phi_1 = c
 p.sol.ds=0.001;                     % positive for up-hexagons
 p=pmcont(p,225);
 
-% %% c-sec: secondary bifurcations
-% %bpt1 shifted down hex, bpt2,3 weird, bpt4,5 nothing
-% p = swibra('hex-up','bpt1','hex-sec-bif1');
+%% c-sec: secondary bifurcations
+%bpt1 shifted down hex, bpt2,3 weird, bpt4,5 nothing
+p = swibra('hex-up','bpt1','hex-sec-bif1');
+p.sol.ds=0.01;
+p=pmcont(p,100);
+
+% %% M=13
+% %bpt 5,6 nothing
+% p0=qswibra('init-M13hex','bpt1');
+% p=gentau(p0,[1,1],'M13hex-up');        
+% p.sol.ds=0.001;                   
+% p=pmcont(p,343);
+% p = swibra('M13hex-up','bpt4','M13hex-sec-bif4');
 % p.sol.ds=0.01;
 % p=pmcont(p,100);
+% hold on;
+% plotbra('init-M13hex','cl','k');
+% plotbra('M13hex-up','cl','b');
+% plotbra('M13hex-sec-bif4','cl','b');
+% plotbra('M13hex-sec-bif5','cl','b');
+% plotbra('M13hex-sec-bif6','cl','b');
+% hold off;
+% if saveFigures
+%     set(gcf,'position',[0,0,693,400])
+%     saveas(gcf,'bifurcation-diag-M13hex','epsc');
+% end
+% plotsol('M13hex-sec-bif4','pt100',1,1,2,'cm','jet');
+% if saveFigures
+%     set(gcf,'position',[0,0,693,400])
+%     saveas(gcf,'M13hex-sec-bif4-pt100','epsc');
+% end
 
 %% c4: switch branch to periodic bifurcation branches and continue up to film-rupture through down-hexagons
 p0=qswibra('init-hex','bpt1');
@@ -61,11 +90,11 @@ p=gentau(p0,[1,1],'hex-down');
 p.sol.ds=-0.001;                    % negative for down-hexagons
 p=pmcont(p,276);
 
-% %% c-sec: secondary bifurcations
-% %bpt1 down hex, bpt2,3 weird, bpt4 nothing
-% p = swibra('hex-down','bpt4','hex-sec-bif1');
-% p.sol.ds=0.01;
-% p=pmcont(p,100);
+%% c-sec: secondary bifurcations
+%bpt1 down hex, bpt2,3 weird, bpt4 nothing
+p = swibra('hex-down','bpt4','hex-sec-bif1');
+p.sol.ds=0.01;
+p=pmcont(p,100);
 
 %% c5: plot bifurcation diagram hexagons
 hold on;
@@ -75,14 +104,14 @@ plotbra('hex-down','cl','b');
 hold off;
 % save bifurcation diagram as eps
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'bifurcation-diag-hex','epsc');
 end
 
 %% c6: plot up-hexagon close to the bifurcation point
-plotsol('hex-up','pt5',1,1,2);      % last option 1 mesh graph, 2 contour plot, 3 graph
+plotsol('hex-up','pt5',1,1,2,'cm','jet');      % last option 1 mesh graph, 2 contour plot, 3 graph
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'small-hex-up','epsc');
 end
 
@@ -94,23 +123,23 @@ if saveFigures
 end
 
 %% c8: plot up-hexagon close to film-rupture
-plotsol('hex-up','pt224',1,1,3);
+plotsol('hex-up','pt224',1,1,3,'cm','jet');
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'film-rupture-hex-up','epsc');
 end
 
 %% c9: plot down-hexagon close to the bifurcation point
-plotsol('hex-down','pt5',1,1,3);
+plotsol('hex-down','pt5',1,1,2,'cm','jet');
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'small-hex-down','epsc');
 end
 
 %% c10: plot down-hexagon close to film-rupture
-plotsol('hex-down','pt275',1,1,3);
+plotsol('hex-down','pt275',1,1,3,'cm','jet');
 if saveFigures
-    set(gcf,'position',[0,0,500,400])
+    set(gcf,'position',[0,0,680,400])
     saveas(gcf,'film-rupture-hex-down','epsc');
 end
 
@@ -135,34 +164,47 @@ sol_hex_down_pt5 = [data_hex_down_pt5.pdeo.grid.p;data_hex_down_pt5.u(1:end-3).'
 
 % load solution down-hexagon close to film-rupture
 data_hex_down_pt275 = loadp('hex-down','pt275');
-sol_hex_down_pt275 = [data_hex_up_pt275.pdeo.grid.p;data_hex_up_pt275.u(1:end-3).'];
+sol_hex_down_pt275 = [data_hex_down_pt275.pdeo.grid.p;data_hex_down_pt275.u(1:end-3).'];
 
 % extract bifurcation branch data
-data_init = loadpp('init-squ');
+data_init = loadpp('init-hex');
 brainit = data_init.branch([4,6],:);
 
-data_squ = loadpp('squ');
-bra_squ = data_squ.branch([4,6],:);
+data_hex_up = loadpp('hex-up');
+bra_hex_up = data_hex_up.branch([4,6],:);
+
+data_hex_down = loadpp('hex-down');
+bra_hex_down = data_hex_down.branch([4,6],:);
 
 % write data to text files
 if saveData
     formatSpec = '(%5.5f,%5.5f) ';
 
-    fileID = fopen('branchData.txt','w');
+    fileID = fopen('branchDataHex.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' brainit ','==================']);
     fprintf(fileID,formatSpec,brainit);
 
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_squ ','==================']);
-    fprintf(fileID,formatSpec,bra_squ);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_hex_up ','==================']);
+    fprintf(fileID,formatSpec,bra_hex_up);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_hex_down ','==================']);
+    fprintf(fileID,formatSpec,bra_hex_down);
     fclose(fileID);
 
-    fileID = fopen('solutionData.txt','w');
-    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
-    fprintf(fileID,formatSpec,sol_squ_pt5);
-    fclose(fileID);
+    fileID = fopen('solutionDataHex.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' solution up-hexagon pt5 ','==================']);
+    fprintf(fileID,formatSpec,sol_hex_up_pt5);
 
-    fileID = fopen('solutionData.txt','w');
-    fprintf(fileID,'%1s\n\n',['==================',' solution squares pt206 ','==================']);
-    fprintf(fileID,formatSpec,sol_squ_pt206);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution up-hexagon fp1 ','==================']);
+    fprintf(fileID,formatSpec,sol_hex_up_fpt1);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution up-hexagon pt224 ','==================']);
+    fprintf(fileID,formatSpec,sol_hex_up_pt224);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution down-hexagon pt5 ','==================']);
+    fprintf(fileID,formatSpec,sol_hex_down_pt5);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution down-hexagon pt275 ','==================']);
+    fprintf(fileID,formatSpec,sol_hex_down_pt275);
     fclose(fileID);
 end
