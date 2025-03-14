@@ -30,18 +30,21 @@ saveData = 1;
 p = [];
 lx = [2*pi (2/sqrt(3))*pi];         % set domain size; this ratio allows for hexagonal pattern
 nx = [100 100];                     % number of discretisation points per dimension in domain
+% nx = [300 300];                     % number of discretisation points per dimension in domain
 Minit = 7.8;                        % initial Marangoni number
+% Minit = 12.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];   
 p = tfinit(p,lx,nx,par);
 p.fuha.outfu = @tfbra;
 p = setfn(p,'init-hex');
+% p = setfn(p,'init-M13hex');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
 %% c2: continuation of the trivial branch
-p = cont(p,25);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
+p = cont(p,15);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through up-hexagons
 p0=qswibra('init-hex','bpt1');
@@ -50,11 +53,37 @@ p=gentau(p0,[1,1],'hex-up');        % Detected tangent directions are \phi_1 = c
 p.sol.ds=0.001;                     % positive for up-hexagons
 p=pmcont(p,225);
 
-% %% c-sec: secondary bifurcations
-% %bpt1 shifted down hex, bpt2,3 weird, bpt4,5 nothing
-% p = swibra('hex-up','bpt1','hex-sec-bif1');
+%% c-sec: secondary bifurcations
+%bpt1 shifted down hex, bpt2,3 weird, bpt4,5 nothing
+p = swibra('hex-up','bpt1','hex-sec-bif1');
+p.sol.ds=0.01;
+p=pmcont(p,100);
+
+% %% M=13
+% %bpt 5,6 nothing
+% p0=qswibra('init-M13hex','bpt1');
+% p=gentau(p0,[1,1],'M13hex-up');        
+% p.sol.ds=0.001;                   
+% p=pmcont(p,343);
+% p = swibra('M13hex-up','bpt4','M13hex-sec-bif4');
 % p.sol.ds=0.01;
 % p=pmcont(p,100);
+% hold on;
+% plotbra('init-M13hex','cl','k');
+% plotbra('M13hex-up','cl','b');
+% plotbra('M13hex-sec-bif4','cl','b');
+% plotbra('M13hex-sec-bif5','cl','b');
+% plotbra('M13hex-sec-bif6','cl','b');
+% hold off;
+% if saveFigures
+%     set(gcf,'position',[0,0,693,400])
+%     saveas(gcf,'bifurcation-diag-M13hex','epsc');
+% end
+% plotsol('M13hex-sec-bif4','pt100',1,1,2,'cm','jet');
+% if saveFigures
+%     set(gcf,'position',[0,0,693,400])
+%     saveas(gcf,'M13hex-sec-bif4-pt100','epsc');
+% end
 
 %% c4: switch branch to periodic bifurcation branches and continue up to film-rupture through down-hexagons
 p0=qswibra('init-hex','bpt1');
@@ -62,11 +91,11 @@ p=gentau(p0,[1,1],'hex-down');
 p.sol.ds=-0.001;                    % negative for down-hexagons
 p=pmcont(p,276);
 
-% %% c-sec: secondary bifurcations
-% %bpt1 down hex, bpt2,3 weird, bpt4 nothing
-% p = swibra('hex-down','bpt4','hex-sec-bif1');
-% p.sol.ds=0.01;
-% p=pmcont(p,100);
+%% c-sec: secondary bifurcations
+%bpt1 down hex, bpt2,3 weird, bpt4 nothing
+p = swibra('hex-down','bpt4','hex-sec-bif1');
+p.sol.ds=0.01;
+p=pmcont(p,100);
 
 %% c5: plot bifurcation diagram hexagons
 hold on;
