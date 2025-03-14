@@ -18,7 +18,7 @@ p = stanparam(p);                       % assign 'standard values' to p
 screenlayout(p);                        % set standard positions for pde2path figures
 p.nc.neq = 1;                           % set number of equations
 p.sw.sfem = -1;                         % flags use of oopde
-p.plot.auxdict = {'M','g','lambda'};    % parameter names
+p.plot.auxdict = {'M','g','lambda','min(v)','L^2 log(1+v)'};    % parameter names and additional plots
 
 p.fuha.sG = @sG;                        % set bifurcation function
 p.fuha.sGjac = @sGjac;                  % set derivative of bifurcation function

@@ -4,7 +4,7 @@
 % - cmds_hex is set up to detect hexagonal patterns
 % - cmds_squ is set up to detect square patterns
 %
-% The command file performs a numerical continuation of the second order
+% The command fileperforms a numerical continuation of the second order
 % equation
 %
 %   0 = \Delta v - gv + M*( 1/(2+v) + log((1+v)/(2+v)) ) - M*K(0) + lambda
@@ -35,6 +35,7 @@ ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];   
 p = tfinit(p,lx,nx,par);
+p.fuha.outfu = @tfbra;
 p = setfn(p,'init-hex');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
@@ -179,3 +180,31 @@ if saveData
     fprintf(fileID,formatSpec,sol_hex_down_pt275);
     fclose(fileID);
 end
+
+%% plot integration constant \lambda = K(0) - K(v)
+
+figure(15)
+hold on;
+plotbra('init-hex',15,3,'cl','k');
+plotbra('hex-up',15,3,'cl','k');
+plotbra('hex-down',15,3,'cl','k');
+hold off;
+
+
+%% plot L^2 norm of log(1+v)
+
+figure(16)
+hold on;
+plotbra('init-hex',16,5,'cl','k');
+plotbra('hex-up',16,5,'cl','k');
+plotbra('hex-down',16,5,'cl','k');
+hold off;
+
+%% plot minimum
+
+figure(17)
+hold on;
+plotbra('init-hex',17,4,'cl','k');
+plotbra('hex-up',17,4,'cl','k');
+plotbra('hex-down',17,4,'cl','k');
+hold off;

@@ -37,6 +37,7 @@ ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
+p.fuha.outfu = @tfbra;
 p = setfn(p,'init-squ');
 % p = setfn(p,'init-M13squ');
 para = 1;                           % set Marangoni number as bifurcation parameter
@@ -167,3 +168,32 @@ if saveData
     fprintf(fileID,formatSpec,sol_squ_pt206);
     fclose(fileID);
 end
+
+
+%% plot integration constant \lambda = K(0) - K(v)
+
+figure(15)
+hold on;
+plotbra('init-squ',15,3,'cl','k');
+plotbra('squ',15,3,'cl','k');
+plotbra('square-sec-bif',15,3,'cl','k');
+hold off;
+
+
+%% plot L^2 norm of log(1+v)
+
+figure(16)
+hold on;
+plotbra('init-squ',16,5,'cl','k');
+plotbra('squ',16,5,'cl','k');
+plotbra('square-sec-bif',16,5,'cl','k');
+hold off;
+
+%% plot minimum
+
+figure(17)
+hold on;
+plotbra('init-squ',17,4,'cl','k');
+plotbra('squ',17,4,'cl','k');
+plotbra('square-sec-bif',17,4,'cl','k');
+hold off;
