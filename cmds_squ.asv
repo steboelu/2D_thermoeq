@@ -160,7 +160,7 @@ data_squ_pt206 = loadp('squ','pt206');
 sol_squ_pt206 = [data_squ_pt206.pdeo.grid.p;data_squ_pt206.u(1:end-3).'];
 
 % load secondary bifurcation solution
-data_squ_bpt3 = loadp('squ','bpt3');
+data_squ_bpt3 = loadp('squ','bpt3-squ');
 sol_squ_bpt3 = [data_squ_bpt3.pdeo.grid.p;data_squ_bpt3.u(1:end-3).'];
 
 data_sec_squ_pt10 = loadp('square-sec-bif','pt10');
@@ -207,10 +207,10 @@ data_sec_const_squ = loadpp('square-sec-bif');
 bra_sec_const_squ = data_sec_const_squ.branch(3,:);
 
 data_init_l2norm_squ = loadpp('square-sec-bif');
-bra_sec_l2norm_squ = data_init_l2norm_squ.branch(5,:);
+bra_sec_l2norm_squ = data_sec_l2norm_squ.branch(5,:);
 
 data_init_min_squ = loadpp('square-sec-bif');
-bra_sec_min_squ = data_init_min_squ.branch(4,:);
+bra_sec_min_squ = data_sec_min_squ.branch(4,:);
 
 % write data to text files
 if saveData
@@ -227,7 +227,6 @@ if saveData
     fprintf(fileID,formatSpec,bra_sec_squ);
     fclose(fileID);
 
-
     fileID = fopen('solutionDataSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
     fprintf(fileID,formatSpec,sol_squ_pt5);
@@ -236,7 +235,6 @@ if saveData
     fprintf(fileID,formatSpec,sol_squ_pt206);
     fclose(fileID);
 
-    
     fileID = fopen('solutionDataSquSec.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' solution squares secondary bif pt ','==================']);
     fprintf(fileID,formatSpec,sol_squ_bpt3);
@@ -263,7 +261,6 @@ if saveData
     fprintf(fileID,formatSpec,bra_sec_const_squ);
     fclose(fileID);
     
-    
     fileID = fopen('l2normPlotSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' l2norm_init ','==================']);
     fprintf(fileID,formatSpec,bra_init_l2norm_squ);
@@ -273,17 +270,5 @@ if saveData
 
     fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm_sec ','==================']);
     fprintf(fileID,formatSpec,bra_sec_l2norm_squ);
-    fclose(fileID);
-
-
-    fileID = fopen('minSqu.txt','w');
-    fprintf(fileID,'%1s\n\n',['==================',' min_init ','==================']);
-    fprintf(fileID,formatSpec,bra_init_min_squ);
-
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' min ','==================']);
-    fprintf(fileID,formatSpec,bra_min_squ);
-
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' min_sec ','==================']);
-    fprintf(fileID,formatSpec,bra_sec_min_squ);
     fclose(fileID);
 end
