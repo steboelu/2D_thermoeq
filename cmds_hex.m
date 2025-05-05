@@ -1,4 +1,4 @@
-%% main command file for the bifurcation analysis of a 2D thermocapillary thin-film equation
+%test%% main command file for the bifurcation analysis of a 2D thermocapillary thin-film equation
 % 
 % There are two main command files:
 % - cmds_hex is set up to detect hexagonal patterns
