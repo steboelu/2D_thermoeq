@@ -227,26 +227,26 @@ if saveData
     fclose(fileID);
 
 
-    fileID = fopen('constantPlotHex.txt','w');
+    fileID = fopen('constantPlotSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' constant_init ','==================']);
     fprintf(fileID,formatSpec,bra_init_const_hex);
 
     fprintf(fileID,'\n\n%1s\n\n',['==================',' constant ','==================']);
-    fprintf(fileID,formatSpec,bra_const_hex);
+    fprintf(fileID,formatSpec,bra_const_squ);
     
     
-    fileID = fopen('l2normPlotHex.txt','w');
+    fileID = fopen('l2normPlotSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' l2norm_init ','==================']);
-    fprintf(fileID,formatSpec,bra_init_l2norm_hex);
+    fprintf(fileID,formatSpec,bra_init_l2norm_squ);
 
     fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm ','==================']);
-    fprintf(fileID,formatSpec,bra_l2norm_hex);
+    fprintf(fileID,formatSpec,bra_l2norm_squ);
 
 
-    fileID = fopen('minHex.txt','w');
+    fileID = fopen('minSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' min_init ','==================']);
-    fprintf(fileID,formatSpec,bra_init_min_hex);
+    fprintf(fileID,formatSpec,bra_init_min_squ);
 
     fprintf(fileID,'\n\n%1s\n\n',['==================',' min ','==================']);
-    fprintf(fileID,formatSpec,bra_min_hex);
+    fprintf(fileID,formatSpec,bra_min_squ);
 end
