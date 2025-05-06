@@ -110,6 +110,7 @@ end
 hold on;
 plotbra('init-hex',15,3,'cl','k');
 plotbra('hex-up',15,3,'cl','k');
+plotbra('hex-down',15,3,'cl','k');
 hold off;
 % save constant K as eps
 if saveFigures
@@ -121,6 +122,7 @@ end
 hold on;
 plotbra('init-hex',16,5,'cl','k');
 plotbra('hex-up',16,5,'cl','k');
+plotbra('hex-down',16,5,'cl','k');
 hold off;
 % save L2 norm as eps
 if saveFigures
@@ -132,6 +134,7 @@ end
 hold on;
 plotbra('init-hex',17,4,'cl','k');
 plotbra('hex-up',17,4,'cl','k');
+plotbra('hex-down',17,4,'cl','k');
 hold off;
 % save minimum norm as eps
 if saveFigures
@@ -183,14 +186,24 @@ data_init_min_hex = loadpp('init-hex');
 bra_init_min_hex = data_init_min_hex.branch(4,:);
 
 
-data_const_hex = loadpp('hex-up');
-bra_const_hex = data_const_hex.branch(3,:);
+data_const_hex_up = loadpp('hex-up');
+bra_const_hex_up = data_const_hex_up.branch(3,:);
 
-data_l2norm_hex = loadpp('hex-up');
-bra_l2norm_hex = data_l2norm_hex.branch(5,:);
+data_l2norm_hex_up = loadpp('hex-up');
+bra_l2norm_hex_up = data_l2norm_hex_up.branch(5,:);
 
-data_min_hex = loadpp('hex-up');
-bra_min_hex = data_min_hex.branch(4,:);
+data_min_hex_up = loadpp('hex-up');
+bra_min_hex_up = data_min_hex_up.branch(4,:);
+
+
+data_const_hex_down = loadpp('hex-down');
+bra_const_hex_down = data_const_hex_down.branch(3,:);
+
+data_l2norm_hex_down = loadpp('hex-down');
+bra_l2norm_hex_down = data_l2norm_hex_down.branch(5,:);
+
+data_min_hex_down = loadpp('hex-down');
+bra_min_hex_down = data_min_hex_down.branch(4,:);
 
 % write data to text files
 if saveData
@@ -215,10 +228,10 @@ if saveData
     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution up-hexagon fp1 ','==================']);
     fprintf(fileID,formatSpec,sol_hex_up_fpt1);
 
-
     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution up-hexagon pt224 ','==================']);
     fprintf(fileID,formatSpec,sol_hex_up_pt224);
 
+    
     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution down-hexagon pt5 ','==================']);
     fprintf(fileID,formatSpec,sol_hex_down_pt5);
 
@@ -231,22 +244,31 @@ if saveData
     fprintf(fileID,'%1s\n\n',['==================',' constant_init ','==================']);
     fprintf(fileID,formatSpec,bra_init_const_hex);
 
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' constant ','==================']);
-    fprintf(fileID,formatSpec,bra_const_hex);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' constant_up ','==================']);
+    fprintf(fileID,formatSpec,bra_const_hex_up);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' constant_down ','==================']);
+    fprintf(fileID,formatSpec,bra_const_hex_down);
     
     
     fileID = fopen('l2normPlotHex.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' l2norm_init ','==================']);
     fprintf(fileID,formatSpec,bra_init_l2norm_hex);
 
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm ','==================']);
-    fprintf(fileID,formatSpec,bra_l2norm_hex);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm_up ','==================']);
+    fprintf(fileID,formatSpec,bra_l2norm_hex_up);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm_down ','==================']);
+    fprintf(fileID,formatSpec,bra_l2norm_hex_down);
 
 
     fileID = fopen('minHex.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' min_init ','==================']);
     fprintf(fileID,formatSpec,bra_init_min_hex);
 
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' min ','==================']);
-    fprintf(fileID,formatSpec,bra_min_hex);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' min_up ','==================']);
+    fprintf(fileID,formatSpec,bra_min_hex_up);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' min_down ','==================']);
+    fprintf(fileID,formatSpec,bra_min_hex_down);
 end
