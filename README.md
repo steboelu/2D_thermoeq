@@ -7,10 +7,10 @@ A preprint can be found at -----.
 ### Abstract
 
 We study two-dimensional, stationary square and hexagonal patterns in the thermocapillary deformational thin-film model for the fluid height $h$ 
-$$
+\begin{equation*}
     \nabla\cdot(h^3(\nabla\Delta h-g\nabla h)+M\frac{h^2}{(1+h)^2}\nabla h)=0
     ,\quad t>0,\quad x\in\R^2,
-$$
+\end{equation*}
 that can be formally derived from the Bénard–Marangoni problem via a long-wave approximation. Using a linear stability analysis, we show that the flat surface profile corresponding to the pure conduction state destabilises at a critical Marangoni number $M^\ast$ via a conserved long-wave instability. For any fixed absolute wave number $k_0$, we find that square and hexagonal patterns bifurcate from the flat surface profile at $M=M^\ast + 4k_0^2$. Using analytic global bifurcation theory, we show that the local bifurcation branches can be extended to global branches of square and hexagonal patterns with constant absolute wave number and mass. We establish a nodal property for the solutions on these global bifurcation branches, which in particular prevents the curves from returning to the trivial branch. Furthermore, assuming that the Marangoni number is uniformly bounded on the bifurcation branch, we prove that solutions exhibit film rupture, that is, their minimal height tends to zero. This assumption is substantiated by numerical experiments.
 ### pde2path
 
