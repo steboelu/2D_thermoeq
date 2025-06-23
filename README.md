@@ -9,7 +9,7 @@ A preprint can be found at -----.
 We study two-dimensional, stationary square and hexagonal patterns in the thermocapillary deformational thin-film model for the fluid height $h$ 
 
 $$
-    \nabla\cdot(h^3(\nabla\Delta h-g\nabla h)+M\frac{h^2}{(1+h)^2}\nabla h)=0
+    \partial_t h+\nabla\cdot\left(h^3(\nabla\Delta h-g\nabla h)+M\frac{h^2}{(1+h)^2}\nabla h\right)=0
     ,\quad t>0,\quad x\in\mathbb{R}^2,
 $$
 
