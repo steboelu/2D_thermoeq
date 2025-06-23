@@ -4,6 +4,9 @@
 % - cmds_hex is set up to detect hexagonal patterns
 % - cmds_squ is set up to detect square patterns
 %
+% There are three additional command files to study patterns bifurcating at
+% M=20.
+%
 % The command file performs a numerical continuation of the second order
 % equation
 %
@@ -30,16 +33,13 @@ saveData = 1;
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
 nx = [100 100];                     % number of discretisation points per dimension in domain
-% nx = [200 200];                     % number of discretisation points per dimension in domain
 Minit = 7.9;                        % initial Marangoni number
-% Minit = 12.9;                       % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
 p.fuha.outfu = @tfbra;
 p = setfn(p,'init-squ');
-% p = setfn(p,'init-M13squ');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
@@ -51,46 +51,38 @@ p0=cswibra('init-squ','bpt1');
 p=seltau(p0, 2,'squ',3); 
 p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
 p=pmcont(p,206); 
-% p0 = cswibra('init-M13squ','bpt1');
-% p=seltau(p0, 2,'M13squ',3);
-% p.sol.ds=0.01;
-% p=pmcont(p,100);
 
-%% c-sec: secondary bifurcation
-% bpt3 admissible pattern with 8 min around a max
-% bpt1 rolls, bpt2,6,7,8 weird, 
-% bpt4 no sol, bpt5 nothing
-p = swibra('squ','bpt3','square-sec-bif');
+%% c4: secondary bifurcation
+p = swibra('squ','bpt3','square-sec-bif');  % bpt3 admissible pattern with 8 min around a max
 p.sol.ds=0.01;
 p=pmcont(p,121);
 
-%% c4: plot bifurcation diagram squares
+%% c5: plot bifurcation diagram squares
 hold on;
 plotbra('init-squ','cl','k');
 plotbra('squ','cl','b');
 plotbra('square-sec-bif','cl','b');
 hold off;
-% save bifurcation diagram as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'bifurcation-diag-squ','epsc');
 end
 
-%% c5: plot solution close to the bifurcation point
-plotsol('squ','pt5',1,1,2,'cm','jet')
+%% c6: plot solution close to the bifurcation point
+plotsol('squ','pt5',1,1,2,'cm','jet')   %third numeric argument: 1 mesh graph, 2 contour plot, 3 graph
 if saveFigures
     set(gcf,'position',[0,0,400,400])
     saveas(gcf,'small-squ','epsc')
 end
 
-%% c6: plot solution close to film-rupture
+%% c7: plot solution close to film rupture
 plotsol('squ','pt206',1,1,3,'cm','jet')
 if saveFigures
     set(gcf,'position',[0,0,400,400])
     saveas(gcf,'film-rupture-squ','epsc')
 end
 
-%% c7: plot sec-bif solution
+%% c8: plot sec-bif solution
 plotsol('squ','bpt3',1,1,2,'cm','jet')
 if saveFigures
     set(gcf,'position',[0,0,400,400])
@@ -112,43 +104,40 @@ if saveFigures
     saveas(gcf,'film-rupture-sec-squ','epsc')
 end
 
-%% c8: plot integration constant \lambda = K(0) - K(v)
+%% c9: plot integration constant \lambda = K(0) - K(v)
 hold on;
 plotbra('init-squ',15,3,'cl','k');
 plotbra('squ',15,3,'cl','k');
 plotbra('square-sec-bif',15,3,'cl','k');
 hold off;
-% save constant K as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'constant-K-squ','epsc');
 end
 
-%% c9: plot L^2 norm of log(1+v)
+%% c10: plot L^2 norm of log(1+v)
 hold on;
 plotbra('init-squ',16,5,'cl','k');
 plotbra('squ',16,5,'cl','k');
 plotbra('square-sec-bif',16,5,'cl','k');
 hold off;
-% save L2 norm as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'l2norm-squ','epsc');
 end
 
-%% c10: plot minimum
+%% c11: plot minimum
 hold on;
 plotbra('init-squ',17,4,'cl','k');
 plotbra('squ',17,4,'cl','k');
 plotbra('square-sec-bif',17,4,'cl','k');
 hold off;
-% save minimum norm as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'minimum-squ','epsc');
 end
 
-%% c8: export of plot data
+%% c12: export of plot data
 % extract and save solution data.
 
 % load solution close to bifurcation point
@@ -184,33 +173,33 @@ bra_sec_squ = data_sec_squ.branch([4,6],:);
 
 % extract other plots data
 data_init_const_squ = loadpp('init-squ');
-bra_init_const_squ = data_init_const_squ.branch(3,:);
+bra_init_const_squ = data_init_const_squ.branch([4,9],:);
 
 data_init_l2norm_squ = loadpp('init-squ');
-bra_init_l2norm_squ = data_init_l2norm_squ.branch(5,:);
+bra_init_l2norm_squ = data_init_l2norm_squ.branch([4,11],:);
 
 data_init_min_squ = loadpp('init-squ');
-bra_init_min_squ = data_init_min_squ.branch(4,:);
+bra_init_min_squ = data_init_min_squ.branch([4,10],:);
 
 
 data_const_squ = loadpp('squ');
-bra_const_squ = data_const_squ.branch(3,:);
+bra_const_squ = data_const_squ.branch([4,9],:);
 
 data_l2norm_squ = loadpp('squ');
-bra_l2norm_squ = data_l2norm_squ.branch(5,:);
+bra_l2norm_squ = data_l2norm_squ.branch([4,11],:);
 
 data_min_squ = loadpp('squ');
-bra_min_squ = data_min_squ.branch(4,:);
+bra_min_squ = data_min_squ.branch([4,10],:);
 
 
 data_sec_const_squ = loadpp('square-sec-bif');
-bra_sec_const_squ = data_sec_const_squ.branch(3,:);
+bra_sec_const_squ = data_sec_const_squ.branch([4,9],:);
 
 data_init_l2norm_squ = loadpp('square-sec-bif');
-bra_sec_l2norm_squ = data_init_l2norm_squ.branch(5,:);
+bra_sec_l2norm_squ = data_init_l2norm_squ.branch([4,11],:);
 
 data_init_min_squ = loadpp('square-sec-bif');
-bra_sec_min_squ = data_init_min_squ.branch(4,:);
+bra_sec_min_squ = data_init_min_squ.branch([4,10],:);
 
 % write data to text files
 if saveData

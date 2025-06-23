@@ -1,10 +1,13 @@
-%test%% main command file for the bifurcation analysis of a 2D thermocapillary thin-film equation
+%% main command file for the bifurcation analysis of a 2D thermocapillary thin-film equation
 % 
 % There are two main command files:
 % - cmds_hex is set up to detect hexagonal patterns
 % - cmds_squ is set up to detect square patterns
 %
-% The command fileperforms a numerical continuation of the second order
+% There are three additional command files to study patterns bifurcating at
+% M=20.
+%
+% The command file performs a numerical continuation of the second order
 % equation
 %
 %   0 = \Delta v - gv + M*( 1/(2+v) + log((1+v)/(2+v)) ) - M*K(0) + lambda
@@ -30,16 +33,13 @@ saveData = 1;
 p = [];
 lx = [2*pi (2/sqrt(3))*pi];         % set domain size; this ratio allows for hexagonal pattern
 nx = [100 100];                     % number of discretisation points per dimension in domain
-% nx = [300 300];                     % number of discretisation points per dimension in domain
 Minit = 7.8;                        % initial Marangoni number
-% Minit = 12.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];   
 p = tfinit(p,lx,nx,par);
 p.fuha.outfu = @tfbra;
 p = setfn(p,'init-hex');
-% p = setfn(p,'init-M13hex');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
@@ -65,14 +65,13 @@ plotbra('init-hex','cl','k');
 plotbra('hex-up','cl','b');
 plotbra('hex-down','cl','b');
 hold off;
-% save bifurcation diagram as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'bifurcation-diag-hex','epsc');
 end
 
 %% c6: plot up-hexagon close to the bifurcation point
-plotsol('hex-up','pt5',1,1,2,'cm','jet');      % last option 1 mesh graph, 2 contour plot, 3 graph
+plotsol('hex-up','pt5',1,1,2,'cm','jet');
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'small-hex-up','epsc');
@@ -112,7 +111,6 @@ plotbra('init-hex',15,3,'cl','k');
 plotbra('hex-up',15,3,'cl','k');
 plotbra('hex-down',15,3,'cl','k');
 hold off;
-% save constant K as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'constant-K-hex','epsc');
@@ -124,7 +122,6 @@ plotbra('init-hex',16,5,'cl','k');
 plotbra('hex-up',16,5,'cl','k');
 plotbra('hex-down',16,5,'cl','k');
 hold off;
-% save L2 norm as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'l2norm-hex','epsc');
@@ -136,13 +133,12 @@ plotbra('init-hex',17,4,'cl','k');
 plotbra('hex-up',17,4,'cl','k');
 plotbra('hex-down',17,4,'cl','k');
 hold off;
-% save minimum norm as eps
 if saveFigures
     set(gcf,'position',[0,0,680,400])
     saveas(gcf,'minimum-hex','epsc');
 end
 
-%% c11: export of plot data
+%% c14: export of plot data
 % extract and save solution data.
 
 % load solution up-hexagon close to the bifurcation point
@@ -177,33 +173,33 @@ bra_hex_down = data_hex_down.branch([4,6],:);
 
 % extract other plots data
 data_init_const_hex = loadpp('init-hex');
-bra_init_const_hex = data_init_const_hex.branch(3,:);
+bra_init_const_hex = data_init_const_hex.branch([4,9],:);
 
 data_init_l2norm_hex = loadpp('init-hex');
-bra_init_l2norm_hex = data_init_l2norm_hex.branch(5,:);
+bra_init_l2norm_hex = data_init_l2norm_hex.branch([4,11],:);
 
 data_init_min_hex = loadpp('init-hex');
-bra_init_min_hex = data_init_min_hex.branch(4,:);
+bra_init_min_hex = data_init_min_hex.branch([4,10],:);
 
 
 data_const_hex_up = loadpp('hex-up');
-bra_const_hex_up = data_const_hex_up.branch(3,:);
+bra_const_hex_up = data_const_hex_up.branch([4,9],:);
 
 data_l2norm_hex_up = loadpp('hex-up');
-bra_l2norm_hex_up = data_l2norm_hex_up.branch(5,:);
+bra_l2norm_hex_up = data_l2norm_hex_up.branch([4,11],:);
 
 data_min_hex_up = loadpp('hex-up');
-bra_min_hex_up = data_min_hex_up.branch(4,:);
+bra_min_hex_up = data_min_hex_up.branch([4,10],:);
 
 
 data_const_hex_down = loadpp('hex-down');
-bra_const_hex_down = data_const_hex_down.branch(3,:);
+bra_const_hex_down = data_const_hex_down.branch([4,9],:);
 
 data_l2norm_hex_down = loadpp('hex-down');
-bra_l2norm_hex_down = data_l2norm_hex_down.branch(5,:);
+bra_l2norm_hex_down = data_l2norm_hex_down.branch([4,11],:);
 
 data_min_hex_down = loadpp('hex-down');
-bra_min_hex_down = data_min_hex_down.branch(4,:);
+bra_min_hex_down = data_min_hex_down.branch([4,10],:);
 
 % write data to text files
 if saveData

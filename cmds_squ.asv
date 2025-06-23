@@ -4,6 +4,9 @@
 % - cmds_hex is set up to detect hexagonal patterns
 % - cmds_squ is set up to detect square patterns
 %
+% There are three additional command files to study patterns bifurcating at
+% M=20.
+%
 % The command file performs a numerical continuation of the second order
 % equation
 %
@@ -30,16 +33,13 @@ saveData = 1;
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
 nx = [100 100];                     % number of discretisation points per dimension in domain
-% nx = [200 200];                     % number of discretisation points per dimension in domain
 Minit = 7.9;                        % initial Marangoni number
-% Minit = 12.9;                       % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
 par = [Minit, ginit, lambdaInit];
 p = tfinit(p,lx,nx,par);
 p.fuha.outfu = @tfbra;
 p = setfn(p,'init-squ');
-% p = setfn(p,'init-M13squ');
 para = 1;                           % set Marangoni number as bifurcation parameter
 p.nc.dsmax=0.03;
                                                                                                     
@@ -51,16 +51,9 @@ p0=cswibra('init-squ','bpt1');
 p=seltau(p0, 2,'squ',3); 
 p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
 p=pmcont(p,206); 
-% p0 = cswibra('init-M13squ','bpt1');
-% p=seltau(p0, 2,'M13squ',3);
-% p.sol.ds=0.01;
-% p=pmcont(p,100);
 
 %% c-sec: secondary bifurcation
-% bpt3 admissible pattern with 8 min around a max
-% bpt1 rolls, bpt2,6,7,8 weird, 
-% bpt4 no sol, bpt5 nothing
-p = swibra('squ','bpt3','square-sec-bif');
+p = swibra('squ','bpt3','square-sec-bif');  % bpt3 admissible pattern with 8 min around a max
 p.sol.ds=0.01;
 p=pmcont(p,121);
 
@@ -160,7 +153,7 @@ data_squ_pt206 = loadp('squ','pt206');
 sol_squ_pt206 = [data_squ_pt206.pdeo.grid.p;data_squ_pt206.u(1:end-3).'];
 
 % load secondary bifurcation solution
-data_squ_bpt3 = loadp('squ','bpt3-squ');
+data_squ_bpt3 = loadp('squ','bpt3');
 sol_squ_bpt3 = [data_squ_bpt3.pdeo.grid.p;data_squ_bpt3.u(1:end-3).'];
 
 data_sec_squ_pt10 = loadp('square-sec-bif','pt10');
@@ -184,33 +177,33 @@ bra_sec_squ = data_sec_squ.branch([4,6],:);
 
 % extract other plots data
 data_init_const_squ = loadpp('init-squ');
-bra_init_const_squ = data_init_const_squ.branch(3,:);
+bra_init_const_squ = data_init_const_squ.branch([4,9],:);
 
 data_init_l2norm_squ = loadpp('init-squ');
-bra_init_l2norm_squ = data_init_l2norm_squ.branch(5,:);
+bra_init_l2norm_squ = data_init_l2norm_squ.branch([4,11],:);
 
 data_init_min_squ = loadpp('init-squ');
-bra_init_min_squ = data_init_min_squ.branch(4,:);
+bra_init_min_squ = data_init_min_squ.branch([4,10],:);
 
 
 data_const_squ = loadpp('squ');
-bra_const_squ = data_const_squ.branch(3,:);
+bra_const_squ = data_const_squ.branch([4,9],:);
 
 data_l2norm_squ = loadpp('squ');
-bra_l2norm_squ = data_l2norm_squ.branch(5,:);
+bra_l2norm_squ = data_l2norm_squ.branch([4,11],:);
 
 data_min_squ = loadpp('squ');
-bra_min_squ = data_min_squ.branch(4,:);
+bra_min_squ = data_min_squ.branch([4,10],:);
 
 
 data_sec_const_squ = loadpp('square-sec-bif');
-bra_sec_const_squ = data_sec_const_squ.branch(3,:);
+bra_sec_const_squ = data_sec_const_squ.branch([4,9],:);
 
 data_init_l2norm_squ = loadpp('square-sec-bif');
-bra_sec_l2norm_squ = data_sec_l2norm_squ.branch(5,:);
+bra_sec_l2norm_squ = data_init_l2norm_squ.branch([4,11],:);
 
 data_init_min_squ = loadpp('square-sec-bif');
-bra_sec_min_squ = data_sec_min_squ.branch(4,:);
+bra_sec_min_squ = data_init_min_squ.branch([4,10],:);
 
 % write data to text files
 if saveData
@@ -227,6 +220,7 @@ if saveData
     fprintf(fileID,formatSpec,bra_sec_squ);
     fclose(fileID);
 
+
     fileID = fopen('solutionDataSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
     fprintf(fileID,formatSpec,sol_squ_pt5);
@@ -235,6 +229,7 @@ if saveData
     fprintf(fileID,formatSpec,sol_squ_pt206);
     fclose(fileID);
 
+    
     fileID = fopen('solutionDataSquSec.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' solution squares secondary bif pt ','==================']);
     fprintf(fileID,formatSpec,sol_squ_bpt3);
@@ -261,6 +256,7 @@ if saveData
     fprintf(fileID,formatSpec,bra_sec_const_squ);
     fclose(fileID);
     
+    
     fileID = fopen('l2normPlotSqu.txt','w');
     fprintf(fileID,'%1s\n\n',['==================',' l2norm_init ','==================']);
     fprintf(fileID,formatSpec,bra_init_l2norm_squ);
@@ -271,4 +267,19 @@ if saveData
     fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm_sec ','==================']);
     fprintf(fileID,formatSpec,bra_sec_l2norm_squ);
     fclose(fileID);
+
+
+    fileID = fopen('minSqu.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' min_init ','==================']);
+    fprintf(fileID,formatSpec,bra_init_min_squ);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' min ','==================']);
+    fprintf(fileID,formatSpec,bra_min_squ);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' min_sec ','==================']);
+    fprintf(fileID,formatSpec,bra_sec_min_squ);
+    fclose(fileID);
 end
+%%
+plotsol('squ','pt5',1,1,1,'cm','jet')
+pdemesh()

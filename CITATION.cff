@@ -1,32 +1,3 @@
 ################################################################CHANGE THIS
 
-# This CITATION.cff file was generated with cffinit.
-# Visit https://bit.ly/cffinit to generate yours today!
-
-cff-version: 1.2.0
-title: >-
-  Data availability for ``Thermocapillary thin films: periodic steady states and
-  film rupture''
-message: >-
-  If you use this dataset, please cite it using the metadata
-  from this file.
-type: dataset
-authors:
-  - given-names: Gabriele
-    family-names: Bruell
-    email: gabriele.brull@math.lth.se
-  - given-names: Bastian
-    family-names: Hilder
-    email: bastian.hilder@tum.de
-  - given-names: Jonas
-    family-names: Jansen
-    email: jonas.jansen@math.lth.se
-identifiers:
-  - type: url
-    value: >-
-      https://github.com/Bastian-Hilder/global-bif-thermocapillary-thin-film-equation
-repository-code: >-
-  https://github.com/Bastian-Hilder/global-bif-thermocapillary-thin-film-equation
-license: GPL-3.0
-version: '1.0'
-date-released: '2023-08-23'
+----generate this
