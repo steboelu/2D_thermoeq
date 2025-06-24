@@ -1,3 +1,29 @@
-################################################################CHANGE THIS
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
 
-----generate this
+cff-version: 1.2.0
+title: >-
+  Data availability for ``Pattern formation and film rupture
+  in a two-dimensional thermocapillary thin-film model of
+  the Bénard--Marangoni problem''
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: dataset
+authors:
+  - given-names: Stefano
+    family-names: Böhmer
+    email: stefano.bohmer@math.lu.se
+  - given-names: Bastian
+    family-names: Hilder
+    email: bastian.hilder@tum.de
+  - given-names: Jonas
+    family-names: Jansen
+    email: jonas.jansen@scai.fraunhofer.de
+identifiers:
+  - type: url
+    value: 'https://github.com/steboelu/2D_thermoeq'
+repository-code: 'https://github.com/steboelu/2D_thermoeq'
+license: GPL-3.0
+version: '1.0'
+date-released: '2025-06-24'
