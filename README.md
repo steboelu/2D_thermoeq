@@ -2,7 +2,7 @@ final 23.06.2025
 # 2D Thermocapillary thin films: periodic steady states and film rupture
 
 In this repository you find the Matlab code that has generated the numerical plots used in the article "Pattern formation and film rupture in a two-dimensional thermocapillary thin-film model of the Bénard--Marangoni problem" by Stefano Böhmer, Bastian Hilder and Jonas Jansen. 
-A preprint can be found at -----.
+A preprint can be found at [arXiv:2506.19795](https://arxiv.org/abs/2506.19795).
 
 ### Abstract
 
