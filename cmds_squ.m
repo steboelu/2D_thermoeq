@@ -32,7 +32,7 @@ saveData = 1;
 %% c1: init and set parameters
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
-nx = [100 100];                     % number of discretisation points per dimension in domain
+nx = [200 200];                     % number of discretisation points per dimension in domain
 Minit = 7.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
@@ -49,13 +49,18 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through squares
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
-p.sol.ds=0.01;                      % -0.01 gives rise to "down-squares"
-p=pmcont(p,206); 
+p.sol.ds=-0.01;                     % 0.01 gives rise to "down-squares"
+p=pmcont(p,205); 
 
-%% c4: secondary bifurcation
+%% c4_1: secondary bifurcation admissible
 p = swibra('squ','bpt3','square-sec-bif');  % bpt3 admissible pattern with 8 min around a max
-p.sol.ds=0.01;
-p=pmcont(p,121);
+p.sol.ds=-0.01;
+p=pmcont(p,120);
+
+%% c4_2: secondary bifurcation not admissible
+p = swibra('squ','bpt2','square-sec-bif-notadm');  % bpt2 not admissible pa
+p.sol.ds=-0.01;
+p=pmcont(p,300);
 
 %% c5: plot bifurcation diagram squares
 hold on;
@@ -76,7 +81,7 @@ if saveFigures
 end
 
 %% c7: plot solution close to film rupture
-plotsol('squ','pt206',1,1,3,'cm','jet')
+plotsol('squ','pt200',1,1,3,'cm','jet')
 if saveFigures
     set(gcf,'position',[0,0,400,400])
     saveas(gcf,'film-rupture-squ','epsc')
@@ -98,10 +103,32 @@ if saveFigures
     set(gcf,'position',[0,0,400,400])
     saveas(gcf,'sec-squ-pt25','epsc')
 end
-plotsol('square-sec-bif','pt120',4,1,2,'cm','jet')
+plotsol('square-sec-bif','pt119',4,1,2,'cm','jet')
 if saveFigures
     set(gcf,'position',[0,0,400,400])
     saveas(gcf,'film-rupture-sec-squ','epsc')
+end
+
+%% c8_2: plot not admissible sec-bif solution
+plotsol('squ','bpt2',1,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'bpt2-squ','epsc')
+end
+plotsol('square-sec-bif-notadm','pt10',2,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'sec-squ-notadm-pt10','epsc')
+end
+plotsol('square-sec-bif-notadm','pt25',3,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'sec-squ-notadm-pt25','epsc')
+end
+plotsol('square-sec-bif-notadm','pt152',4,1,2,'cm','jet')
+if saveFigures
+    set(gcf,'position',[0,0,400,400])
+    saveas(gcf,'film-rupture-sec-squ-notadm','epsc')
 end
 
 %% c9: plot integration constant \lambda = K(0) - K(v)
@@ -145,8 +172,8 @@ data_squ_pt5 = loadp('squ','pt5');
 sol_squ_pt5 = [data_squ_pt5.pdeo.grid.p;data_squ_pt5.u(1:end-3).'];
 
 % load solution close to film-rupture
-data_squ_pt206 = loadp('squ','pt206');
-sol_squ_pt206 = [data_squ_pt206.pdeo.grid.p;data_squ_pt206.u(1:end-3).'];
+data_squ_pt200 = loadp('squ','pt200');
+sol_squ_pt200 = [data_squ_pt200.pdeo.grid.p;data_squ_pt200.u(1:end-3).'];
 
 % load secondary bifurcation solution
 data_squ_bpt3 = loadp('squ','bpt3');
@@ -158,8 +185,21 @@ sol_sec_squ_pt10 = [data_sec_squ_pt10.pdeo.grid.p;data_sec_squ_pt10.u(1:end-3).'
 data_sec_squ_pt25 = loadp('square-sec-bif','pt25');
 sol_sec_squ_pt25 = [data_sec_squ_pt25.pdeo.grid.p;data_sec_squ_pt25.u(1:end-3).'];
 
-data_sec_squ_pt120 = loadp('square-sec-bif','pt120');
-sol_sec_squ_pt120 = [data_sec_squ_pt120.pdeo.grid.p;data_sec_squ_pt120.u(1:end-3).'];
+data_sec_squ_pt119 = loadp('square-sec-bif','pt119');
+sol_sec_squ_pt119 = [data_sec_squ_pt119.pdeo.grid.p;data_sec_squ_pt119.u(1:end-3).'];
+
+% load not admissible secondary bifurcation solution
+data_squ_bpt2 = loadp('squ','bpt2');
+sol_squ_bpt2 = [data_squ_bpt2.pdeo.grid.p;data_squ_bpt2.u(1:end-3).'];
+
+data_sec_squ_pt10_notadm = loadp('square-sec-bif-notadm','pt10');
+sol_sec_squ_pt10_notadm = [data_sec_squ_pt10_notadm.pdeo.grid.p;data_sec_squ_pt10_notadm.u(1:end-3).'];
+
+data_sec_squ_pt25_notadm = loadp('square-sec-bif-notadm','pt25');
+sol_sec_squ_pt25_notadm = [data_sec_squ_pt25_notadm.pdeo.grid.p;data_sec_squ_pt25_notadm.u(1:end-3).'];
+
+data_sec_squ_pt152_notadm = loadp('square-sec-bif-notadm','pt152');
+sol_sec_squ_pt152_notadm = [data_sec_squ_pt152_notadm.pdeo.grid.p;data_sec_squ_pt152_notadm.u(1:end-3).'];
 
 % extract bifurcation branch data
 data_init = loadpp('init-squ');
@@ -221,8 +261,8 @@ if saveData
     fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
     fprintf(fileID,formatSpec,sol_squ_pt5);
 
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares pt206 ','==================']);
-    fprintf(fileID,formatSpec,sol_squ_pt206);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares pt200 ','==================']);
+    fprintf(fileID,formatSpec,sol_squ_pt200);
     fclose(fileID);
 
     
@@ -236,8 +276,23 @@ if saveData
     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares secondary branch pt25 ','==================']);
     fprintf(fileID,formatSpec,sol_sec_squ_pt25);
 
-    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares secondary branch pt120 ','==================']);
-    fprintf(fileID,formatSpec,sol_sec_squ_pt120);
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares secondary branch pt119 ','==================']);
+    fprintf(fileID,formatSpec,sol_sec_squ_pt119);
+    fclose(fileID);
+
+    
+    fileID = fopen('solutionDataSquSec-notadm.txt','w');
+    fprintf(fileID,'%1s\n\n',['==================',' solution squares not admissible secondary bif pt ','==================']);
+    fprintf(fileID,formatSpec,sol_squ_bpt2);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares not admissible secondary branch pt10 ','==================']);
+    fprintf(fileID,formatSpec,sol_sec_squ_pt10_notadm);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares not admissible secondary branch pt25 ','==================']);
+    fprintf(fileID,formatSpec,sol_sec_squ_pt25_notadm);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares not admissible secondary branch pt152 ','==================']);
+    fprintf(fileID,formatSpec,sol_sec_squ_pt152_notadm);
     fclose(fileID);
 
     

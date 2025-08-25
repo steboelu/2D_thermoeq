@@ -46,7 +46,7 @@ p.nc.dsmax=0.03;
 %% c2: continuation of the trivial branch
 p = cont(p,15);                     % set up to detect bifurcation point at M = 8 (one full hexagon)
 
-%% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through up-hexagons
+ %% c3: switch branch to periodic bifurcation branches and continue up to film-rupture through up-hexagons
 p0=qswibra('init-hex','bpt1');
 p=gentau(p0,[1,1],'hex-up');        % Detected tangent directions are \phi_1 = cos(k_1*(x,y)) and \phi_2 = cos(k_2*(x,y))+cos(k_3*(x,y)). 
 %                                     Generate tanget direction \phi_1 + \phi_2, which yields hexagons.
