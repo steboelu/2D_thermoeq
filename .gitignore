@@ -36,3 +36,7 @@
 ehthumbs.db
 Thumbs.db
 *.asv
+
+# ignore continuation folders
+squ/
+init-squ/
