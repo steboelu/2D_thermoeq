@@ -25,14 +25,14 @@ close all;
 keep pphome;
 
 % set to 1 to save plotted figures as eps
-saveFigures = 1;
+saveFigures = 0;
 % set to 1 to save plot data
-saveData = 1;
+saveData = 0;
 
 %% c1: init and set parameters
 p = [];
 lx = [2*pi 2*pi];                   % set domain size; this ratio does not allow for hexagonal pattern
-nx = [200 200];                     % number of discretisation points per dimension in domain
+nx = [100 100];                     % number of discretisation points per dimension in domain
 Minit = 7.9;                        % initial Marangoni number
 ginit = 1;                          % set gravitational constant
 lambdaInit = 0;                     % set initial integration constant (lambda = M*( K(0) - K ))
@@ -50,8 +50,8 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 p.nc.dsmax=0.0001;
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
-p.sol.ds=0.00001;                     % 0.01 gives rise to "down-squares"
-p=pmcont(p,100); 
+p.sol.ds=0.0001;                     % 0.01 gives rise to "down-squares"
+p=pmcont(p,25); 
 
 %% c5: plot bifurcation diagram squares
 hold on;
@@ -64,7 +64,7 @@ if saveFigures
 end
 
 %% c6: plot solution close to the bifurcation point
-plotsol('squ','pt5',1,1,2,'cm','jet')   %third numeric argument: 1 mesh graph, 2 contour plot, 3 graph
+plotsol('squ','pt25',1,1,2,'cm','jet')   %third numeric argument: 1 mesh graph, 2 contour plot, 3 graph
 if saveFigures
     set(gcf,'position',[0,0,400,400])
     saveas(gcf,'small-squ','epsc')
@@ -81,10 +81,16 @@ if saveFigures
 end
 
 %% c10: plot difference of numerical solution and local approximation
+figure(16);
+hold on;
 plotbra('squ',16,6,'cl','k');
+plotbra('squ',16,7,'cl','r');
+plotbra('squ',16,8,'cl','r');
+plotbra('squ','wnr',16,'cl','b');
+hold off;
 if saveFigures
     set(gcf,'position',[0,0,680,400])
-    saveas(gcf,'constant-K-squ','epsc');
+    saveas(gcf,'error','epsc');
 end
 
 % %% c12: export of plot data
