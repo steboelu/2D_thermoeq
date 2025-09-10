@@ -26,10 +26,11 @@
 *.sql
 *.sqlite
 
-# image files #
+# image and text files #
 ######################
 *.eps
 *.pdf
+*.txt
 
 # OS generated files #
 ######################
