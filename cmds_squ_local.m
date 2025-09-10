@@ -1,11 +1,8 @@
 %% main command file for the bifurcation analysis of a 2D thermocapillary thin-film equation
 % 
-% There are two main command files:
-% - cmds_hex is set up to detect hexagonal patterns
-% - cmds_squ is set up to detect square patterns
-%
-% There are three additional command files to study patterns bifurcating at
-% M=20.
+% This is an additional command file to study compare the local behaviour
+% of the numerical continuation branch of square patterns with the rigorous
+% prediction from local bifurcation theory.
 %
 % The command file performs a numerical continuation of the second order
 % equation
@@ -25,9 +22,9 @@ close all;
 keep pphome;
 
 % set to 1 to save plotted figures as eps
-saveFigures = 0;
+saveFigures = 1;
 % set to 1 to save plot data
-saveData = 0;
+saveData = 1;
 
 %% c1: init and set parameters
 p = [];
@@ -50,213 +47,56 @@ p = cont(p,15);                     % set up to detect bifurcation point at M = 
 p.nc.dsmax=0.0001;
 p0=cswibra('init-squ','bpt1'); 
 p=seltau(p0, 2,'squ',3); 
-p.sol.ds=0.0001;                     % 0.01 gives rise to "down-squares"
+p.sol.ds=0.0001;                     
 p=pmcont(p,25); 
 
-%% c5: plot bifurcation diagram squares
-hold on;
-plotbra('init-squ','cl','k');
-plotbra('squ','cl','b');
-hold off;
-if saveFigures
-    set(gcf,'position',[0,0,680,400])
-    saveas(gcf,'bifurcation-diag-squ','epsc');
-end
-
-%% c6: plot solution close to the bifurcation point
-plotsol('squ','pt25',1,1,2,'cm','jet')   %third numeric argument: 1 mesh graph, 2 contour plot, 3 graph
-if saveFigures
-    set(gcf,'position',[0,0,400,400])
-    saveas(gcf,'small-squ','epsc')
-end
-
-%% c9: plot integration constant \lambda = K(0) - K(v)
-hold on;
-plotbra('init-squ',15,3,'cl','k');
-plotbra('squ',15,3,'cl','k');
-hold off;
-if saveFigures
-    set(gcf,'position',[0,0,680,400])
-    saveas(gcf,'constant-K-squ','epsc');
-end
-
-%% c10: plot difference of numerical solution and local approximation
+%% c4: plot difference of numerical solution and local approximation
 figure(16);
 hold on;
 plotbra('squ',16,6,'cl','k');
-plotbra('squ',16,7,'cl','r');
-plotbra('squ',16,8,'cl','r');
-plotbra('squ','wnr',16,'cl','b');
 hold off;
 if saveFigures
     set(gcf,'position',[0,0,680,400])
-    saveas(gcf,'error','epsc');
+    saveas(gcf,'error-squ-max','epsc');
 end
 
-% %% c12: export of plot data
-% % extract and save solution data.
-% 
-% % load solution close to bifurcation point
-% data_squ_pt5 = loadp('squ','pt5');
-% sol_squ_pt5 = [data_squ_pt5.pdeo.grid.p;data_squ_pt5.u(1:end-3).'];
-% 
-% % load solution close to film-rupture
-% data_squ_pt200 = loadp('squ','pt200');
-% sol_squ_pt200 = [data_squ_pt200.pdeo.grid.p;data_squ_pt200.u(1:end-3).'];
-% 
-% % load secondary bifurcation solution
-% data_squ_bpt3 = loadp('squ','bpt3');
-% sol_squ_bpt3 = [data_squ_bpt3.pdeo.grid.p;data_squ_bpt3.u(1:end-3).'];
-% 
-% data_sec_squ_pt10 = loadp('square-sec-bif','pt10');
-% sol_sec_squ_pt10 = [data_sec_squ_pt10.pdeo.grid.p;data_sec_squ_pt10.u(1:end-3).'];
-% 
-% data_sec_squ_pt25 = loadp('square-sec-bif','pt25');
-% sol_sec_squ_pt25 = [data_sec_squ_pt25.pdeo.grid.p;data_sec_squ_pt25.u(1:end-3).'];
-% 
-% data_sec_squ_pt119 = loadp('square-sec-bif','pt119');
-% sol_sec_squ_pt119 = [data_sec_squ_pt119.pdeo.grid.p;data_sec_squ_pt119.u(1:end-3).'];
-% 
-% % load not admissible secondary bifurcation solution
-% data_squ_bpt2 = loadp('squ','bpt2');
-% sol_squ_bpt2 = [data_squ_bpt2.pdeo.grid.p;data_squ_bpt2.u(1:end-3).'];
-% 
-% data_sec_squ_pt10_notadm = loadp('square-sec-bif-notadm','pt10');
-% sol_sec_squ_pt10_notadm = [data_sec_squ_pt10_notadm.pdeo.grid.p;data_sec_squ_pt10_notadm.u(1:end-3).'];
-% 
-% data_sec_squ_pt25_notadm = loadp('square-sec-bif-notadm','pt25');
-% sol_sec_squ_pt25_notadm = [data_sec_squ_pt25_notadm.pdeo.grid.p;data_sec_squ_pt25_notadm.u(1:end-3).'];
-% 
-% data_sec_squ_pt152_notadm = loadp('square-sec-bif-notadm','pt152');
-% sol_sec_squ_pt152_notadm = [data_sec_squ_pt152_notadm.pdeo.grid.p;data_sec_squ_pt152_notadm.u(1:end-3).'];
-% 
-% % extract bifurcation branch data
-% data_init = loadpp('init-squ');
-% brainit = data_init.branch([4,6],:);
-% 
-% data_squ = loadpp('squ');
-% bra_squ = data_squ.branch([4,6],:);
-% 
-% data_sec_squ = loadpp('square-sec-bif');
-% bra_sec_squ = data_sec_squ.branch([4,6],:);
-% 
-% % extract other plots data
-% data_init_const_squ = loadpp('init-squ');
-% bra_init_const_squ = data_init_const_squ.branch([4,9],:);
-% 
-% data_init_l2norm_squ = loadpp('init-squ');
-% bra_init_l2norm_squ = data_init_l2norm_squ.branch([4,11],:);
-% 
-% data_init_min_squ = loadpp('init-squ');
-% bra_init_min_squ = data_init_min_squ.branch([4,10],:);
-% 
-% 
-% data_const_squ = loadpp('squ');
-% bra_const_squ = data_const_squ.branch([4,9],:);
-% 
-% data_l2norm_squ = loadpp('squ');
-% bra_l2norm_squ = data_l2norm_squ.branch([4,11],:);
-% 
-% data_min_squ = loadpp('squ');
-% bra_min_squ = data_min_squ.branch([4,10],:);
-% 
-% 
-% data_sec_const_squ = loadpp('square-sec-bif');
-% bra_sec_const_squ = data_sec_const_squ.branch([4,9],:);
-% 
-% data_init_l2norm_squ = loadpp('square-sec-bif');
-% bra_sec_l2norm_squ = data_init_l2norm_squ.branch([4,11],:);
-% 
-% data_init_min_squ = loadpp('square-sec-bif');
-% bra_sec_min_squ = data_init_min_squ.branch([4,10],:);
-% 
-% % write data to text files
-% if saveData
-%     formatSpec = '(%5.5f,%5.5f) ';
-% 
-%     fileID = fopen('branchDataSqu.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' brainit ','==================']);
-%     fprintf(fileID,formatSpec,brainit);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_squ ','==================']);
-%     fprintf(fileID,formatSpec,bra_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_sec_squ ','==================']);
-%     fprintf(fileID,formatSpec,bra_sec_squ);
-%     fclose(fileID);
-% 
-% 
-%     fileID = fopen('solutionDataSqu.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' solution squares pt5 ','==================']);
-%     fprintf(fileID,formatSpec,sol_squ_pt5);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares pt200 ','==================']);
-%     fprintf(fileID,formatSpec,sol_squ_pt200);
-%     fclose(fileID);
-% 
-% 
-%     fileID = fopen('solutionDataSquSec.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' solution squares secondary bif pt ','==================']);
-%     fprintf(fileID,formatSpec,sol_squ_bpt3);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares secondary branch pt10 ','==================']);
-%     fprintf(fileID,formatSpec,sol_sec_squ_pt10);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares secondary branch pt25 ','==================']);
-%     fprintf(fileID,formatSpec,sol_sec_squ_pt25);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares secondary branch pt119 ','==================']);
-%     fprintf(fileID,formatSpec,sol_sec_squ_pt119);
-%     fclose(fileID);
-% 
-% 
-%     fileID = fopen('solutionDataSquSec-notadm.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' solution squares not admissible secondary bif pt ','==================']);
-%     fprintf(fileID,formatSpec,sol_squ_bpt2);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares not admissible secondary branch pt10 ','==================']);
-%     fprintf(fileID,formatSpec,sol_sec_squ_pt10_notadm);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares not admissible secondary branch pt25 ','==================']);
-%     fprintf(fileID,formatSpec,sol_sec_squ_pt25_notadm);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' solution squares not admissible secondary branch pt152 ','==================']);
-%     fprintf(fileID,formatSpec,sol_sec_squ_pt152_notadm);
-%     fclose(fileID);
-% 
-% 
-%     fileID = fopen('constantPlotSqu.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' constant_init ','==================']);
-%     fprintf(fileID,formatSpec,bra_init_const_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' constant ','==================']);
-%     fprintf(fileID,formatSpec,bra_const_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' constant_sec ','==================']);
-%     fprintf(fileID,formatSpec,bra_sec_const_squ);
-%     fclose(fileID);
-% 
-% 
-%     fileID = fopen('l2normPlotSqu.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' l2norm_init ','==================']);
-%     fprintf(fileID,formatSpec,bra_init_l2norm_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm ','==================']);
-%     fprintf(fileID,formatSpec,bra_l2norm_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' l2norm_sec ','==================']);
-%     fprintf(fileID,formatSpec,bra_sec_l2norm_squ);
-%     fclose(fileID);
-% 
-% 
-%     fileID = fopen('minSqu.txt','w');
-%     fprintf(fileID,'%1s\n\n',['==================',' min_init ','==================']);
-%     fprintf(fileID,formatSpec,bra_init_min_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' min ','==================']);
-%     fprintf(fileID,formatSpec,bra_min_squ);
-% 
-%     fprintf(fileID,'\n\n%1s\n\n',['==================',' min_sec ','==================']);
-%     fprintf(fileID,formatSpec,bra_sec_min_squ);
-%     fclose(fileID);
-% end
+%% c5: plot approximation and numerical branch
+figure(17);
+hold on;
+plotbra('squ',17,8,'cl','k'); % theoretical prediction in black
+plotbra('squ','wnr',17,'cl','b'); % numerical branch in blue
+hold off;
+if saveFigures
+    set(gcf,'position',[0,0,680,400])
+    saveas(gcf,'comparisonSqu','epsc');
+end
+
+%% c12: export of plot data
+% extract and save solution data.
+
+data_error_squ = loadpp('squ');
+bra_error_squ = data_error_squ.branch([4,12],:);
+
+data_squ = loadpp('squ');
+bra_squ = data_squ.branch([4,6],:);
+
+data_approx_branch_squ = loadpp('squ');
+bra_approx_branch_squ = data_approx_branch_squ.branch([4,14],:);
+
+% write data to text files
+if saveData
+    formatSpec = '(%5.5f,%5.5f) ';
+    
+    fileID = fopen('comparisonSqu.txt','w');
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_squ ','==================']);
+    fprintf(fileID,formatSpec,bra_squ);
+
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_approx_squ ','==================']);
+    fprintf(fileID,formatSpec,bra_approx_branch_squ);
+    fclose(fileID);
+
+    fileID = fopen('errorSqu.txt','w');
+    fprintf(fileID,'\n\n%1s\n\n',['==================',' bra_error_squ ','==================']);
+    fprintf(fileID,formatSpec,bra_error_squ);
+    fclose(fileID);
+end

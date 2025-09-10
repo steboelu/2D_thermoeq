@@ -11,30 +11,43 @@ M = par(1);                                                             % Marang
 % E = p.mat.vM*((1/2)*(1/wnr)^2*(p.mat.Dx*uSol).^2+g*(1+uSol).^2 - M*(1+uSol).*log((1+uSol)./(2+uSol))); % calculate the energy
 % deltaE = E - p.mat.vM*(g*(1+utriv).^2 - M*(1+utriv).*log((1+utriv)./(2+utriv)));
 
-% measure difference to theoretical local bifurcation branch for square
+%% measure difference to theoretical local bifurcation branch for square
+
+[grid,~,~] = getpte(p); % get grid
+
 % patterns with k = 2k_0 = 1, and thus M^*(2k_0) = 8.
 % Mstar = 8.00090265751118; % grid 200x200
 Mstar = 8.00359895163406; % grid 100x100
+% Mstar = 5.00004327981216; % grid 200x200 for k0 = 1/2
 k0 = 1;
-[grid,~,~] = getpte(p);
 
-c2 = -(g+k0^2)*(104 + 203*k0^2)/(24*pi^2*(1+k0^2+k0^4));
-hatxi = transpose(cos(k0*grid(1,:))+cos(k0*grid(2,:)));
-normxi = 8*pi/k0;
-hatxi = hatxi/(p.mat.vM*hatxi.^2)^(1/2);
-uapprox1 = -sqrt((M-Mstar)/c2)*hatxi;
+c2 = -(g+k0^2)*(104 + 203*k0^2)/(24*pi^2*(1+k0^2+k0^4)); % M''(0) for squares
+hatxi = 2*transpose(cos(k0*grid(1,:))+cos(k0*grid(2,:))); % non-normalised kernel element
+normxi = 4*pi*(k0^2+1+1/k0^2)^(1/2); % norm of kernel element
+hatxi = hatxi/normxi; % normalised kernel element
+uapprox1 = sqrt(2*(M-Mstar)/c2)*hatxi; % theoretical prediction
 
-xi = transpose(2*(cos(k0*grid(1,:))+cos(k0*grid(2,:)))); 
-quadcoeff = -2*(g+k0^2)*(104*g+203*k0^2)/(3*k0^2);
-uapprox = -sqrt((M-Mstar)/quadcoeff)*xi;
-diffSqu = max(abs(uSol-uapprox));
+SquApproxL2 = (p.mat.vM*(uapprox1.^2))^(1/2); % L^2-norm of theoretical prediction
+diffSqu = max(abs(uSol-uapprox1)); % L^\infty-norm of difference between numerics and theory
 
-diffSqu = (p.mat.vM*(uapprox.^2))^(1/2);
 
-diffSqu2 = (p.mat.vM*(uapprox1.^2))^(1/2);
+% measure difference between local bifucation in hexagonal case
+% patterns with k = k0 = 1 and thus, M^*(k_0) = 8
+Mstar = 8.00110018265581; % copy numerically found bifurcation point Mstar, grid 100x100
+k0 = 1;
+hatpsi = 2*transpose(cos(k0*grid(1,:)) + cos(k0*(-grid(1,:)/2+sqrt(3)*grid(2,:)/2)) + cos(k0*(-grid(1,:)/2-sqrt(3)*grid(2,:)/2))); % non-normalised kernel element
+normpsi = 4*3^(1/4)*sqrt((1+k0^2+k0^4)/k0^2)*pi; % norm of kernel element
+alpha = 2*(g+k0^2)/(3^(1/4)*pi*sqrt(k0^2+1+1/k0^2)); % M'(0) for hexagons
+uapproxHex = ((M - Mstar)/alpha)*hatpsi/normpsi; % theoretical prediction
 
-diffSqu3 = (p.mat.vM*(sqrt((M-Mstar)/c2)*(xi/normxi)).^2)^(1/2);
+HexApproxL2 = (p.mat.vM*(uapproxHex.^2))^(1/2); % L^2 norm of theoretical prediction
 
+diffHex = max(abs(uapproxHex-uSol)); % L^\infty-norm of difference between numerics and theory
+
+% figure(30)
+% p.pdeo.grid.plot(uapproxHex-uSol,'LineStyle','none'); view(2);
+% colorbar;
+% pause();
 
 
 % ii = 1;
@@ -58,5 +71,6 @@ out=[par;     % parameters
     min(uSol);             % min u
     l2log;
     diffSqu;
-    diffSqu2;
-    diffSqu3];
+    diffHex;
+    SquApproxL2;
+    HexApproxL2];
