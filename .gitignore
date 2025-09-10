@@ -26,6 +26,11 @@
 *.sql
 *.sqlite
 
+# image files #
+######################
+*.eps
+*.pdf
+
 # OS generated files #
 ######################
 .DS_Store
@@ -40,3 +45,6 @@ Thumbs.db
 # ignore continuation folders
 squ/
 init-squ/
+init-hex/
+hex-up/
+
